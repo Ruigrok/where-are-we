@@ -131,11 +131,21 @@
       </div>
       <div class="col-md-1">
       </div>
+
       <!--put google map here-->
       <div class="col-md-4">
+            <!--This is the Div for the map where players will make their guess at the location-->
+            <div id="map">
+            </div>
+            <!--This form is used to store the lat and lng vals for the users pin-drop location guess-->
+            <form action="">
+              <input type="hidden" name="lat" id="lat">
+              <input type="hidden" name="lng" id="lng">
+            </form>
       </div>
+
       <div class="col-md-1">
-    </div>
+      </div>
   </div>
 
 <script src="assets/logic.js"></script>
