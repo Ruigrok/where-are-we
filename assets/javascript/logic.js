@@ -1,5 +1,5 @@
   // Initialize Firebase
-    var config = {
+  var config = {
     apiKey: "AIzaSyB8PdcFQ8isaUyr33dV3cvGydDhMfI9mM0",
     authDomain: "where-are-we-84538.firebaseapp.com",
     databaseURL: "https://where-are-we-84538.firebaseio.com",
@@ -53,6 +53,60 @@
 
   });
 
+
+  $("#addPlayer").click(function(){
+    event.preventDefault();
+
+    var playerName=$("#name-input").val().trim();
+
+    //check if both player exists
+    if( !(player1 && player2))
+    {
+        //if there is no player one
+        if (player1 === null)
+        {
+            //initialize player1 object
+            player1 = {
+                name:playerName,
+                win:0,
+                lose:0,
+                guessCoordinate:"",
+                diffDistance:0
+            };
+            playersRef.child(1).set(player1);
+            // chatkey=chatRef.push().key;
+            // chatRef.child(chatkey).set({name:playerName});
+            thisPlayer=playerName; //store the player to the player's screen
+            //set the turn indicator to 1
+            database.ref().child("/turn").set(1);
+            database.ref("/result").child("/round").set(0);
+            
+            database.ref("/players/1").onDisconnect().remove();
+
+        }//if there is no player one
+        else if (player2 === null)
+        {
+            //initialize player1 object
+            player2 = {
+                name:playerName,
+                win:0,
+                lose:0,
+                guessCoordinate:"",
+                diffDistance:0
+            };
+            playersRef.child(2).set(player2);
+            database.ref("/result").child("/round").set(0);
+            // chatkey=chatRef.push().key;
+            // chatRef.child(chatkey).set({name:playerName});
+            thisPlayer=playerName;
+            database.ref("/players/2").onDisconnect().remove();
+
+        }
+    }
+
+
+});
+
   // Result function comparing distance of player1&2 , and displaying the result 
   	function Result()
   	{
@@ -68,7 +122,7 @@
   			player1.win++;
   			player2.lose++;
   			$("#win").text(player1.win);
-  			if("#lose").text(player2.lose);
+  			$("#lose").text(player2.lose);
   		}
   		else  // incase of a tie
   		{
