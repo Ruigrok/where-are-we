@@ -17,8 +17,8 @@
  var baseimageurl="https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&key=AIzaSyB5-USGgBJR6SQE5bE-A8c58TcHkomHDck&photoreference="
 
   //variabes for store each players object
-  var player1=null; 
-  var player2=null;
+  var player1 = null; 
+  var player2 = null;
 
   //Player object will look like this:
     // player#={
@@ -56,19 +56,19 @@
   // Result function comparing distance of player1&2 , and displaying the result havent done the restart game button yet 
   	function Result()
   	{
-  		if(player1.diffDistance>player2.diffDistance) // player2 wins then
+  		if (player1.diffDistance > player2.diffDistance) // player2 wins then
   		{
   			player2.win++;
   			player1.lose++;
   			$("#win").text(player2.win);
   			$("#lose").text(player1.lose);
   		}
-  		else if(player1.diffDistance<player2.diffDistance) //if player1 wins then 
+  		else if (player1.diffDistance < player2.diffDistance) //if player1 wins then 
   		{
   			player1.win++;
   			player2.lose++;
   			$("#win").text(player1.win);
-  			if("#lose").text(player2.lose);
+  			$("#lose").text(player2.lose);
   		}
   		else  // incase of a tie
   		{
@@ -83,6 +83,7 @@
 //This is the function for adding the pin-drop map
 function initMap() {
   //Declare the starting location of the pin on the map
+   var myLatLng = {lat: 0, lng: 0};
 
   //Compiling a new map object
   var map = new google.maps.Map(document.getElementById('map'), {
@@ -95,8 +96,8 @@ function initMap() {
   var marker = new google.maps.Marker({
     position: myLatLng,
     map: map,
-    draggable:true,
-    title:"Drag me!"
+    draggable: true,
+    title: "Drag me!"
 });
 
 //Use a listening event to retrieve the end value of where the marker is dragged to
@@ -111,7 +112,18 @@ google.maps.event.addListener(marker, 'dragend', function() {
     $('#lat').val(lat);
     $('#lng').val(lng);
 
-    //**Here we need to post these new vals to database "on submit"
+//Testing the distance calculation. We would change this to reference the specific location in an array of locations
+  var pinDrop = new google.maps.LatLng(lat, lng);
+
+  //store coordinate for player1
+  playerRef.child("1/guessCoordinate").set(pinDrop);
+  var newYork = new google.maps.LatLng(40.7128, -74.0059);
+
+var diffDist = google.maps.geometry.spherical.computeDistanceBetween(player1.guessCoordinate, newYork);
+
+//store difference distance for player1
+playersRef.child("1/diffDistance").set(diffDist);
+
 
 })};
 
@@ -152,5 +164,5 @@ function runQuery(randomCity, queryURL) {
         //response.results[i].photos[0].photo + reference
 
 
-})
-        }
+}})
+};
