@@ -53,7 +53,7 @@
 
   });
 
-  // Result function comparing distance of player1&2 , and displaying the result 
+  // Result function comparing distance of player1&2 , and displaying the result havent done the restart game button yet 
   	function Result()
   	{
   		if(player1.diffDistance>player2.diffDistance) // player2 wins then
