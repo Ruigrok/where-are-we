@@ -24,7 +24,7 @@
     // player#={
     //   name:"";
     //   win:0;
-    //   loss:0;
+    //   lose:0;
     //   guessCoordinate:"";
     //   diffDistance:0;
     // }
@@ -43,7 +43,7 @@
 
       if (snapshot.child("2").exists())
       {
-        //player1 exist
+        //player2 exist
         player2=snapshot.child("2").val();
 
 
@@ -52,6 +52,29 @@
       }
 
   });
+
+  // Result function comparing distance of player1&2 , and displaying the result 
+  	function Result()
+  	{
+  		if(player1.diffDistance>player2.diffDistance) // player2 wins then
+  		{
+  			player2.win++;
+  			player1.lose++;
+  			$("#win").text(player2.win);
+  			$("#lose").text(player1.lose);
+  		}
+  		else if(player1.diffDistance<player2.diffDistance) //if player1 wins then 
+  		{
+  			player1.win++;
+  			player2.lose++;
+  			$("#win").text(player1.win);
+  			if("#lose").text(player2.lose);
+  		}
+  		else  // incase of a tie
+  		{
+  			alert("this never happens");
+  		}
+  	}
 
   //Use have users write their user id to a channel, and use security rules to limit the number of users in a room to 2
    
