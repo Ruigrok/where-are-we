@@ -13,6 +13,9 @@
   var database = firebase.database();
   var playersRef=database.ref("/players");
 
+//base url for display place images 
+ var baseimageurl="https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&key=AIzaSyB5-USGgBJR6SQE5bE-A8c58TcHkomHDck&photoreference="
+
   //variabes for store each players object
   var player1=null; 
   var player2=null;
@@ -114,9 +117,15 @@ google.maps.event.addListener(marker, 'dragend', function() {
 
 //Testing the distance calculation. We would change this to reference the specific location in an array of locations
   var pinDrop = new google.maps.LatLng(lat, lng);
+  //store coordinate for player1
+  playerRef.child("1/guessCoordinate").set(pinDrop);
   var newYork = new google.maps.LatLng(40.7128, -74.0059);
 
-console.log(google.maps.geometry.spherical.computeDistanceBetween(pinDrop, newYork));
+
+var diffDist=google.maps.geometry.spherical.computeDistanceBetween(player1.guessCoordinate, newYork);
+
+//store different distance for player1
+playersRef.child("1/diffDistance").set(diffDist);
 
 
 });
