@@ -10,144 +10,92 @@
 </head>
 <body>
   <!-- THIS IS A TEST-->
-  <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" id="title" href="#">Where the Heck Am I?</a>
-      </div>
+  	<nav class="navbar navbar-default navbar-fixed-top">
+    	<div class="container-fluid">
+      		<!-- Brand and toggle get grouped for better mobile display -->
+      		<div class="navbar-header">
+          		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              		<span class="sr-only">Toggle navigation</span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+            	</button>
+            	<a class="navbar-brand" id="title" href="#">Where Are We?</a>
+      		</div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <!--<ul class="nav navbar-nav">
-              <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-              <li><a href="#">Link</a></li>
-              <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">One more separated link</a></li>
-                  </ul>
-              </li>
-          </ul> -->
+        	<!-- Collect the nav links, forms, and other content for toggling -->
+      		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          	
           
-            <ul class="nav navbar-nav navbar-right">
-              <li id="timer"><p id="timer">timer goes here</p></li>
-              <!--We might not need any of this but it's here, maybe we could drop it down and have our names linked to our LinkedIn or GitHub accounts?-->
-              <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                </ul>
-              </li>
-        </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-  </nav>
-  <div class="container">
-  <!--This is all the stuff that should be on the first screen-->
-    <div class="row first-screen">
-      <div class="jumbotron">
-        <h1>Where the Heck Am I?</h1>
-        <p>Welcome to the game that begs the question, "Where the heck am I?" Players will arrive at their randomly chosen destination and will have a limited amount of time to figure out where the heck they are. The player who makes the most accurate guess in the shortest amount of time wins! So what the heck are you waitin' for! Go get lost, why doncha?!</p>
-      </div>
-    </div>
-    <!-- first-screen class on row to hide the -->
-    <div class="row first-screen">
-      <div class="col-md-1">
-      </div>
-      <div class="col-md-3">
-        <div class="input-group player-select">
-              <span class="input-group-btn">
-                <button class="btn btn-default" type="button">Player 1</button>
-              </span>
-              <input type="text" class="form-control" placeholder="Nickname">
-          </div><!-- /input-group -->
-      </div>
-      <div class="col-md-4">
-        <div class="panel panel-default">
-  <!-- Default panel contents -->
-        <div class="panel-heading">Are You Ready?</div>
-          <div class="panel-body">
-              <p>Give yourself a nickname and when both players are ready click the "Get Lost" button below, </p>
-          </div>
+            	<ul class="nav navbar-nav navbar-right">
+            		<li id="timer"><p id="timer">timer goes here</p></li>
+            		<!--We might not need any of this but it's here, maybe we could drop it down and have our names linked to our LinkedIn or GitHub accounts?-->
+            		<li class="dropdown">
+                  		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                  		<ul class="dropdown-menu">
+	                    	<li><a href="#">Action</a></li>
+	                    	<li><a href="#">Another action</a></li>
+	                    	<li><a href="#">Something else here</a></li>
+	                    	<li role="separator" class="divider"></li>
+	                    	<li><a href="#">Separated link</a></li>
+                		</ul>
+              		</li>
+        		</ul>
+        	</div><!-- /.navbar-collapse -->
+    	</div><!-- /.container-fluid -->
+    </nav>
+  	<div class="container">
+  	<!--This is all the stuff that should be on the first screen-->
+    	<div class="row first-screen">
+        	<div class="jumbotron">
+        		<h1>Where Are We?</h1>
+      		</div>
+    	</div>
+    	<!-- first-screen class on row to hide the -->
+   		<div class="row">
+		<!--text form and start button-->
+			<div class="col-md-3 col-centered">
+				<form id="name-form">
+		    		<input type="text" id="name-input" placeholder="What's your nickname">
+		      		<button type="submit" class="btn btn-default" id="addPlayer">Start</button>
+		    	</form>
+			</div>	
+		</div>
+		<br><br>
+		<div class="row">
+ 			<div class="col-md-4 col-centered">
+				<button class="btn btn-xs" type="button" data-toggle="collapse" data-target="#collapseInstruction" aria-expanded="true" aria-controls="collapseInstruction">
+				Instruction
+				</button>
+				<div class="collapse in" id="collapseInstruction">
+					<div class="well" id="instruction">
+					Please Enter your name to play the game.
+					</div>
+				</div>
+			</div>
+	</div> <!--instruction row -->  <!--instruction row -->  <!--close player sign in form-->
 
-            <!-- Table -->
-          <table class="table">
-              <tr>
-                <th>Are you ready?</th>
-              </tr>
-              <!--this lets both players know the other player is ready and will be replaced once jquery and database stuff is written-->
-              <tr>
-                <td>Player One ready</td>
-              </tr>
-              <tr>
-                <td>Player Two ready</td>
-              </tr>
-          </table>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="input-group">
-              <span class="input-group-btn">
-                <button class="btn btn-default" type="button">Player 2</button>
-              </span>
-              <input type="text" class="form-control" placeholder="Nickname">
-            </div>
-      </div>
-      <div class="col-md-1">
-      </div>
-    </div>
-    <div class="row first-screen">
-      <div class="col-md-4">
-      </div>
-      <div class="col-md-4 text-center">
-        <!-- start button has id #start-btn-->
-          <button id="start-btn" name="start" type="submit" class="btn btn-default btn-lg">Let's Play!</button> 
-      </div>
-      <div class="col-md-4">
-      </div>
-    </div>
-    <!--This is the main game screen this should display after user hits starts button-->
+        
+   <!--  <p>This is the main game screen this should display after user hits starts button</p>
     <div class="row second-screen">
-      <div class="col-md-1">
-      </div>
-      <!--put pictures to scroll through here-->
-      <div class="col-md-5">
-      </div>
-      <div class="col-md-1">
-      </div>
-
-      <!--put google map here-->
-      <div class="col-md-4">
-            <!--This is the Div for the map where players will make their guess at the location-->
-            <div id="map">
-            </div>
-            <!--This form is used to store the lat and lng vals for the users pin-drop location guess-->
-            <form action="">
-              <input type="hidden" name="lat" id="lat">
-              <input type="hidden" name="lng" id="lng">
-            </form>
-      </div>
-
-      <div class="col-md-1">
-      </div>
-  </div>
+		<div class="col-md-1">
+		</div>
+		<p>put pictures to scroll through here</p>
+		<div class="col-md-5">
+		</div>
+		<div class="col-md-1">
+		</div>
+		<div class="col-md-4">
+		<p>This is the Div for the map where players will make their guess at the location</p>
+			<div id="map">
+			</div>
+			<p>This form is used to store the lat and lng vals for the users pin-drop location guess</p>
+			<form action="">
+				<input type="hidden" name="lat" id="lat">
+				<input type="hidden" name="lng" id="lng">
+			</form>
+		</div>
+	</div> -->
 
 <script src="assets/logic.js"></script>
 <script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>

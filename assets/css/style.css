@@ -12,8 +12,13 @@ body{
 	margin-top: 90px;
 }
 
-#start-btn{
-	display: none;
+h1{
+	text-align:center;
+}
+
+.col-centered{
+	float:none;
+	margin: 0 auto;
 }
 
 .second-screen{
