@@ -1,4 +1,57 @@
+ // Initialize Firebase
+    var config = {
+    apiKey: "AIzaSyB8PdcFQ8isaUyr33dV3cvGydDhMfI9mM0",
+    authDomain: "where-are-we-84538.firebaseapp.com",
+    databaseURL: "https://where-are-we-84538.firebaseio.com",
+    projectId: "where-are-we-84538",
+    storageBucket: "where-are-we-84538.appspot.com",
+    messagingSenderId: "414783702161"
+  };
+  firebase.initializeApp(config);
 
+  //set database object and neccessary groups
+  var database = firebase.database();
+  var playersRef=database.ref("/players");
+
+//base url for display place images 
+ var baseimageurl="https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&key=AIzaSyB5-USGgBJR6SQE5bE-A8c58TcHkomHDck&photoreference="
+
+  //variabes for store each players object
+  var player1=null; 
+  var player2=null;
+
+  //Player object will look like this:
+    // player#={
+    //   name:"";
+    //   win:0;
+    //   lose:0;
+    //   guessCoordinate:"";
+    //   diffDistance:0;
+    // }
+
+//this is monitoring the value add in players group in the database
+  playersRef.on("value", function(snapshot) {
+      if (snapshot.child("1").exists())
+      {
+        //player1 exist
+        player1=snapshot.child("1").val();
+
+      }else
+      {
+        player1=null;
+      }
+
+      if (snapshot.child("2").exists())
+      {
+        //player2 exist
+        player2=snapshot.child("2").val();
+
+
+      }else{
+        player2=null;
+      }
+
+  });
 
   // Result function comparing distance of player1&2 , and displaying the result havent done the restart game button yet 
   	function Result()
@@ -60,8 +113,44 @@ google.maps.event.addListener(marker, 'dragend', function() {
 
     //**Here we need to post these new vals to database "on submit"
 
+})};
+
+//Array of city objects. When we actually fill out all the city info we can move the array to another JS file to reduce clutter
+var cities = [
+  {
+    name: "New York",
+    lat: 40.7128,
+    lng: -74.0059,
+  },
+  {
+    name: "etc",
+    lat: 0.00,
+    lng: 0.00
+  }
+];
+
+var randomCity = cities[Math.floor(Math.random() * cities.length)];
+//var numberResults = 10
+
+//Doing AJAX call to Google Places for the photos
+var apiKey = "AIzaSyB5-USGgBJR6SQE5bE-A8c58TcHkomHDck";
+vary queryURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?l" + apiKey
 
 
+function runQuery(randomCity, queryURL) {
+  $.ajax({ url: queryURL, method: "GET" })
+    .done(function (response) {
+
+      $('#photos').empty();
+
+      for (var i = 0; i < results.length; i++) {
+
+        if (typeOf(response.results[i].photos) !== "undefined") {
+
+        }
+
+        //response.results[i].photos[0].photo + reference
 
 
-};
+})
+        }
