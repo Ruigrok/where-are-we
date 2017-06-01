@@ -53,6 +53,7 @@
 
   });
 
+<<<<<<< HEAD
 
   $("#addPlayer").click(function(){
     event.preventDefault();
@@ -108,6 +109,9 @@
 });
 
   // Result function comparing distance of player1&2 , and displaying the result 
+=======
+  // Result function comparing distance of player1&2 , and displaying the result havent done the restart game button yet 
+>>>>>>> aec353794cbdf63f0f2fb2ae6904cfca2254cebe
   	function Result()
   	{
   		if(player1.diffDistance>player2.diffDistance) // player2 wins then
