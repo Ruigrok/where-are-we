@@ -23,6 +23,10 @@ var baseimageurl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=40
 var player1 = null;
 var player2 = null;
 
+$("#addPlayer").click(function(){
+    event.preventDefault();
+
+    var playerName=$("#name-input").val().trim();
 //Player object will look like this:
 // player#={
 //   name:"";
@@ -31,6 +35,58 @@ var player2 = null;
 //   guessCoordinate:"";
 //   diffDistance:0;
 // }
+
+    //check if both player exists
+    if( !(player1 && player2))
+    {
+        //if there is no player one
+        if (player1 === null)
+        {
+            //initialize player1 object
+            player1 = {
+                name: playerName,
+                win: 0,
+                loss: 0,
+                tie: 0,
+                guessCoordinate:"",
+                diffDistance:0
+            };
+            playersRef.child(1).set(player1);
+            // chatkey=chatRef.push().key;
+            // chatRef.child(chatkey).set({name:playerName});
+            thisPlayer=playerName; //store the player to the player's screen
+            //set the turn indicator to 1
+            database.ref().child("/turn").set(1);
+            database.ref("/result").child("/round").set(0);
+            
+            database.ref("/players/1").onDisconnect().remove();
+
+            
+
+        }//if there is no player one
+        else if (player2 === null)
+        {
+            //initialize player1 object
+            player2 = {
+                name: playerName,
+                win: 0,
+                loss: 0,
+                tie: 0,
+                guessCoordinate:"",
+                diffDistance:0
+            };
+            playersRef.child(2).set(player2);
+            database.ref("/result").child("/round").set(0);
+            // chatkey=chatRef.push().key;
+            // chatRef.child(chatkey).set({name:playerName});
+            thisPlayer=playerName;
+            database.ref("/players/2").onDisconnect().remove();
+
+        }
+    }
+
+
+});
 
 //this is monitoring the value add in players group in the database
 playersRef.on("value", function (snapshot) {
