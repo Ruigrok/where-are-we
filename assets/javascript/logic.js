@@ -1,3 +1,4 @@
+<<<<<<< HEAD
   // Initialize Firebase
   var config = {
     apiKey: "AIzaSyB8PdcFQ8isaUyr33dV3cvGydDhMfI9mM0",
@@ -12,47 +13,88 @@
   //set database object and neccessary groups
   var database = firebase.database();
   var playersRef=database.ref("/players");
+=======
+// Initialize Firebase
+var config = {
+  apiKey: "AIzaSyB8PdcFQ8isaUyr33dV3cvGydDhMfI9mM0",
+  authDomain: "where-are-we-84538.firebaseapp.com",
+  databaseURL: "https://where-are-we-84538.firebaseio.com",
+  projectId: "where-are-we-84538",
+  storageBucket: "where-are-we-84538.appspot.com",
+  messagingSenderId: "414783702161"
+};
+firebase.initializeApp(config);
+
+//set database object and neccessary groups
+var database = firebase.database();
+var playersRef = database.ref("/players");
+
+//Empty array to place photoReferences returned from AJAX call
+photoReferences = [];
+>>>>>>> 397d3a7d1f74732ff0ff123c6fa6d6051c82fc23
 
 //base url for display place images 
- var baseimageurl="https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&key=AIzaSyB5-USGgBJR6SQE5bE-A8c58TcHkomHDck&photoreference="
+var baseimageurl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&key=AIzaSyB5-USGgBJR6SQE5bE-A8c58TcHkomHDck&photoreference="
 
-  //variabes for store each players object
-  var player1=null; 
-  var player2=null;
+//variabes for store each players object
+var player1 = null;
+var player2 = null;
 
-  //Player object will look like this:
-    // player#={
-    //   name:"";
-    //   win:0;
-    //   lose:0;
-    //   guessCoordinate:"";
-    //   diffDistance:0;
-    // }
+//Player object will look like this:
+// player#={
+//   name:"";
+//   win:0;
+//   lose:0;
+//   guessCoordinate:"";
+//   diffDistance:0;
+// }
 
 //this is monitoring the value add in players group in the database
-  playersRef.on("value", function(snapshot) {
-      if (snapshot.child("1").exists())
-      {
-        //player1 exist
-        player1=snapshot.child("1").val();
+playersRef.on("value", function (snapshot) {
+  if (snapshot.child("1").exists()) {
+    //player1 exist
+    player1 = snapshot.child("1").val();
 
-      }else
-      {
-        player1=null;
-      }
+  } else {
+    player1 = null;
+  }
 
-      if (snapshot.child("2").exists())
-      {
-        //player2 exist
-        player2=snapshot.child("2").val();
+  if (snapshot.child("2").exists()) {
+    //player2 exist
+    player2 = snapshot.child("2").val();
 
 
-      }else{
-        player2=null;
-      }
+  } else {
+    player2 = null;
+  }
 
-  });
+});
 
+// Result function comparing distance of player1&2 , and displaying the result havent done the restart game button yet 
+function Result() {
+  if (player1.diffDistance > player2.diffDistance) // player2 wins then
+  {
+    player2.win++;
+    player1.lose++;
+    $("#win").text(player2.win);
+    $("#lose").text(player1.lose);
+  }
+  else if (player1.diffDistance < player2.diffDistance) //if player1 wins then 
+  {
+    player1.win++;
+    player2.lose++;
+    $("#win").text(player1.win);
+    $("#lose").text(player2.lose);
+  }
+  else  // incase of a tie
+  {
+    alert("this never happens");
+  }
+}
+
+//Use have users write their user id to a channel, and use security rules to limit the number of users in a room to 2
+
+<<<<<<< HEAD
 <<<<<<< HEAD
 
   $("#addPlayer").click(function(){
@@ -136,12 +178,14 @@
 
   //Use have users write their user id to a channel, and use security rules to limit the number of users in a room to 2
    
+=======
+>>>>>>> 397d3a7d1f74732ff0ff123c6fa6d6051c82fc23
 
 
 //This is the function for adding the pin-drop map
 function initMap() {
   //Declare the starting location of the pin on the map
-  var myLatLng = {lat: 0, lng: 0};
+  var myLatLng = { lat: 0, lng: 0 };
 
   //Compiling a new map object
   var map = new google.maps.Map(document.getElementById('map'), {
@@ -154,12 +198,12 @@ function initMap() {
   var marker = new google.maps.Marker({
     position: myLatLng,
     map: map,
-    draggable:true,
-    title:"Drag me!"
-});
+    draggable: true,
+    title: "Drag me!"
+  });
 
-//Use a listening event to retrieve the end value of where the marker is dragged to
-google.maps.event.addListener(marker, 'dragend', function() {
+  //Use a listening event to retrieve the end value of where the marker is dragged to
+  google.maps.event.addListener(marker, 'dragend', function () {
     var lat = marker.getPosition().lat();
     var lng = marker.getPosition().lng();
 
@@ -170,26 +214,63 @@ google.maps.event.addListener(marker, 'dragend', function() {
     $('#lat').val(lat);
     $('#lng').val(lng);
 
-    //**Here we need to post these new vals to database "on submit"
+    //Testing the distance calculation. We would change this to reference the specific location in an array of locations
+    var pinDrop = new google.maps.LatLng(lat, lng);
+
+    //store coordinate for player1
+    playerRef.child("1/guessCoordinate").set(pinDrop);
+    var newYork = new google.maps.LatLng(40.7128, -74.0059);
+
+    var diffDist = google.maps.geometry.spherical.computeDistanceBetween(player1.guessCoordinate, newYork);
+
+    //store difference distance for player1
+    playersRef.child("1/diffDistance").set(diffDist);
 
 
-//Testing the distance calculation. We would change this to reference the specific location in an array of locations
-  var pinDrop = new google.maps.LatLng(lat, lng);
-  //store coordinate for player1
-  playerRef.child("1/guessCoordinate").set(pinDrop);
-  var newYork = new google.maps.LatLng(40.7128, -74.0059);
+  })
+};
+
+//Array of city objects. When we actually fill out all the city info we can move the array to another JS file to reduce clutter
+var cities = [
+  {
+    name: "New York",
+    lat: 40.7128,
+    lng: -74.0059,
+  },
+  {
+    name: "etc",
+    lat: 0.00,
+    lng: 0.00
+  }
+];
+
+var randomCity = cities[Math.floor(Math.random() * cities.length)];
+//var numberResults = 10
+
+//Doing AJAX call to Google Places for the photos
+var apiKey = "AIzaSyB5-USGgBJR6SQE5bE-A8c58TcHkomHDck";
+var radius = 5000;
+var queryURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + apiKey;
+queryURL += "&radius=" + radius;
+queryURL += "&keyword=" + randomCity.name;
+queryURL += "&location=" + randomCity.lat + "," + randomCity.lng;
 
 
-var diffDist=google.maps.geometry.spherical.computeDistanceBetween(player1.guessCoordinate, newYork);
+function runQuery(queryURL) {
+  $.ajax({ url: queryURL, method: "GET" })
+    .done(function (response) {
 
-//store different distance for player1
-playersRef.child("1/diffDistance").set(diffDist);
+      $('#photos').empty();
 
+      var results = response.results;
 
-});
+      for (var i = 0; i < results.length; i++) {
 
-
-
-
-
+        if (typeOf(results[i].photos) !== "undefined") {
+          returnedPhoto = results[i].photos[0].photo_reference;
+          photoReferences.push(returnedPhoto);
+        }
+      }
+    })
+//closing runQuery function
 };
