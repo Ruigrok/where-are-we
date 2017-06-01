@@ -19,6 +19,9 @@
   //variabes for store each players object
   var player1=null; 
   var player2=null;
+  var currPlayerName="";
+
+
 
   //Player object will look like this:
     // player#={
@@ -52,6 +55,15 @@
       }
 
   });
+
+  function displayPlacePhotos()
+  {
+    //tmp array for testing purpose
+    var photoRefIds=["CmRYAAAABLNQO2fSNbBXcTklxQRvH46_UHFvFX315uDSvZijoxiKfesbKysXa1JIqEDcnPmG88rUS9BlJLMqn70TfWmWsYhieZ2U8_cY0ncCjMV6DEuXLhkbW1woMdH7Tmm4yJfCEhC9gjaxON30AZ7u_XkWY-HOGhTBnmlOqZly1cQ5RbDLudPY4hpK8A","CmRYAAAAmeUKPZmrzp3nS3t_967G__PqiCRsVrghtvlM8EREx4NB3-e_8va88jK9zneN6O5KrV4Zea6Kce9GY705UuHVOYC0_9lcT418ePtnJvYdljGZ-bMIx8mt_d_3mdID5vskEhBZMcSG8OhDj47Qx5hxBrWXGhSe3C47BNv4n9cX9p8oETtHAkaxlg","CmRYAAAAyeY60vs4Q5ENh05ygqtvozgogbAt1uJ5VhIL9PuLKOs8jR2b8wyXH4r3txDYlxoU1cS1VNIOesl3TXDc4xU-1eHZMod8KMZEjYtSXscaNPuorrfUN-7khGisSKy2A1AvEhBi_1C1S7xN6uNDMBgDzw9bGhQmMb6o8-cq6DkY5eZTUvdhGlFp6Q"];
+
+    for(var i =0; i< photoRefIds.length)
+
+  }
 
   // Result function comparing distance of player1&2 , and displaying the result 
   	function Result()
