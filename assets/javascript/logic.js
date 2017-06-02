@@ -13,11 +13,6 @@ firebase.initializeApp(config);
 var database = firebase.database();
 var playersRef = database.ref("/players");
 
-//Empty array to place photoReferences returned from AJAX call
-photoReferences = [];
-
-//base url for display place images 
-var baseimageurl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&key=AIzaSyB5-USGgBJR6SQE5bE-A8c58TcHkomHDck&photoreference="
 
 //variabes for store each players object
 var player1 = null;
@@ -46,7 +41,8 @@ $("#addPlayer").click(function () {
         win: 0,
         loss: 0,
         tie: 0,
-        guessCoordinate: "",
+        guessedLat: 0,
+        guessedLng:0,
         diffDistance: 0
       };
       playersRef.child(1).set(player1);
@@ -55,7 +51,7 @@ $("#addPlayer").click(function () {
       thisPlayer = playerName; //store the player to the player's screen
       //set the turn indicator to 1
       database.ref().child("/turn").set(1);
-      database.ref("/result").child("/round").set(0);
+      // database.ref("/result").child("/round").set(0);
 
       database.ref("/players/1").onDisconnect().remove();
 
@@ -69,11 +65,12 @@ $("#addPlayer").click(function () {
         win: 0,
         loss: 0,
         tie: 0,
-        guessCoordinate: "",
+        guessedLat: 0,
+        guessedLng:0,
         diffDistance: 0
       };
       playersRef.child(2).set(player2);
-      database.ref("/result").child("/round").set(0);
+      // database.ref("/result").child("/round").set(0);
       // chatkey=chatRef.push().key;
       // chatRef.child(chatkey).set({name:playerName});
       thisPlayer = playerName;
@@ -104,7 +101,29 @@ playersRef.on("value", function (snapshot) {
     player2 = null;
   }
 
+  if(player1 && player2)
+  {
+    setupGameScreen();
+    initMap();
+  }
+
 });
+
+function setupGameScreen(){
+  displayPlacePhotos();
+  var guessMaps=$("<div>");
+  guessMaps.addClass("row");
+  var guessMap1=$("<div>");
+  var guessMap2=$("<div>");
+
+  guessMap1.attr("id","map");
+  guessMap2.attr("id","map2");
+
+  guessMaps.append(guessMap1);
+  guessMaps.append(guessMap2);
+  $("#gamePlay").append(guessMaps);
+
+};
 
 // Result function comparing distance of player1&2 , and displaying the result havent done the restart game button yet 
 function Result() {
@@ -153,14 +172,15 @@ function initMap() {
   //Declare the location of the default map pin
   var myLatLng = { lat: 0, lng: 0 };
 
-  //Compiling a new map object
+  //Compiling a new map object for guessing 
+  //this is for player 1's guess map
   var map = new google.maps.Map(document.getElementById('map'), {
     zoom: 1,
     center: myLatLng,
     streetViewControl: false
   });
 
-  //Creating the marker and making it draggable
+  //Creating the marker and making it draggable for player to drag 
   var marker = new google.maps.Marker({
     position: myLatLng,
     map: map,
@@ -200,6 +220,54 @@ function initMap() {
     //closing drag end event listener
   });
 
+  //Compiling a new map object for guessing 
+  //this is for player 2's guess map
+  var map2 = new google.maps.Map(document.getElementById('map2'), {
+    zoom: 1,
+    center: myLatLng,
+    streetViewControl: false
+  });
+
+  //Creating the marker and making it draggable for player to drag 
+  var marker2 = new google.maps.Marker({
+    position: myLatLng,
+    map: map,
+    draggable: true,
+    title: "Drag me!"
+  });
+
+  //Use a listening event to retrieve the end value of where the marker is dragged to
+  google.maps.event.addListener(marker2, 'dragend', function () {
+    var guessedLat = marker2.getPosition().lat();
+    var guessedLng = marker2.getPosition().lng();
+
+    console.log(guessedLat);
+    console.log(guessedLng);
+
+    //Asssign the lat and lng values of the new marker location to #lat and #lng in the hidden form
+    $('#lat').val(guessedLat);
+    $('#lng').val(guessedLng);
+
+    //store guessed coordinates for player1
+    playerRef.child("2/guessedLat").set(guessedLat);
+    playerRef.child("2/guessedLng").set(guessedLng);
+
+
+    //Create new LatLng object for players location, pulling lat and lng from firebase
+    var guessedLocation = new google.maps.LatLng(player2.guessedLat, player2.guessedLng);
+
+    //Create new LatLng object for the location of "randomCity"
+    var cityLocation = new google.maps.LatLng(randomCity.lat, randomCity.lng);
+
+    //Testing the distance calculation. We would change this to reference the specific location in an array of locations
+    var diffDist = google.maps.geometry.spherical.computeDistanceBetween(cityLocation, guessedLocation);
+
+    //store difference distance for player1
+    playersRef.child("2/diffDistance").set(diffDist);
+
+    //closing drag end event listener
+  });
+
   //Establishing search request to Google Maps Places Library
   var request = {
     location: citySearch,
@@ -233,7 +301,7 @@ function callback(results, status) {
 function displayPlacePhotos()
   {
     //tmp array for testing purpose
-    var photoRefIds=["https://lh6.googleusercontent.com/-IoCBf7ZHrCs/V4dZSvupvzI/AAAAAAAA0mQ/YxzSoz0FiKg-kUdmimLSPk3sG-Bs0f5qACJkC/w400-h400-k/","https://lh3.googleusercontent.com/-C4-0ZpPCcLM/WE74Ae8DFYI/AAAAAAAB1Jw/8qF8gy2h5ioaMtnJxMZs61yRMJ_HLW81ACLIB/w400-h400-k/"];
+    // var photoRefIds=["https://lh6.googleusercontent.com/-IoCBf7ZHrCs/V4dZSvupvzI/AAAAAAAA0mQ/YxzSoz0FiKg-kUdmimLSPk3sG-Bs0f5qACJkC/w400-h400-k/","https://lh3.googleusercontent.com/-C4-0ZpPCcLM/WE74Ae8DFYI/AAAAAAAB1Jw/8qF8gy2h5ioaMtnJxMZs61yRMJ_HLW81ACLIB/w400-h400-k/"];
 
     //this is setting up the phot carousel structure
     var carouselId="photoCarousel";
@@ -251,7 +319,7 @@ function displayPlacePhotos()
     carInner.addClass("carousel-inner");
     carInner.attr("role","listbox");
 
-    for(var i =0; i< photoRefIds.length;i++)
+    for(var i =0; i< referenceArray.length;i++)
     {
       //list tags for carousel indicators section
       var carList=$("<li>");
@@ -262,7 +330,7 @@ function displayPlacePhotos()
       var carItem=$("<div>");
       
       var imgItem=$("<img>");
-      imgItem.attr("src",photoRefIds[i]);
+      imgItem.attr("src",referenceArray[i]);
      
       if(i===0)
       {
@@ -287,7 +355,7 @@ function displayPlacePhotos()
     carouselContent.append("<a class=\"left carousel-control\" href=\"#photoCarousel\" role=\"button\" data-slide=\"prev\"><span class=\"glyphicon glyphicon-chevron-left\" aria-hidden=\"true\"></span><span class=\"sr-only\">Previous</span></a><a class=\"right carousel-control\" href=\"#photoCarousel\" role=\"button\" data-slide=\"next\"><span class=\"glyphicon glyphicon-chevron-right\" aria-hidden=\"true\"></span><span class=\"sr-only\">Next</span></a>")
     carouselRow.append(carouselCol);
 
-    // return carouselRow;
+    //display the carousel to the gamePlay area
     $("#gamePlay").append(carouselRow);
 // var photoDisp=displayPlacePhotos();
   // $("#gameplay").append(photoDisp);
