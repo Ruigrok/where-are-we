@@ -23,67 +23,64 @@ var baseimageurl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=40
 var player1 = null;
 var player2 = null;
 
-$("#addPlayer").click(function(){
-    event.preventDefault();
+$("#addPlayer").click(function () {
+  event.preventDefault();
 
-    var playerName=$("#name-input").val().trim();
-//Player object will look like this:
-// player#={
-//   name:"";
-//   win:0;
-//   lose:0;
-//   guessCoordinate:"";
-//   diffDistance:0;
-// }
+  var playerName = $("#name-input").val().trim();
+  //Player object will look like this:
+  // player#={
+  //   name:"";
+  //   win:0;
+  //   lose:0;
+  //   guessCoordinate:"";
+  //   diffDistance:0;
+  // }
 
-    //check if both player exists
-    if( !(player1 && player2))
-    {
-        //if there is no player one
-        if (player1 === null)
-        {
-            //initialize player1 object
-            player1 = {
-                name: playerName,
-                win: 0,
-                loss: 0,
-                tie: 0,
-                guessCoordinate:"",
-                diffDistance:0
-            };
-            playersRef.child(1).set(player1);
-            // chatkey=chatRef.push().key;
-            // chatRef.child(chatkey).set({name:playerName});
-            thisPlayer=playerName; //store the player to the player's screen
-            //set the turn indicator to 1
-            database.ref().child("/turn").set(1);
-            database.ref("/result").child("/round").set(0);
-            
-            database.ref("/players/1").onDisconnect().remove();
+  //check if both player exists
+  if (!(player1 && player2)) {
+    //if there is no player one
+    if (player1 === null) {
+      //initialize player1 object
+      player1 = {
+        name: playerName,
+        win: 0,
+        loss: 0,
+        tie: 0,
+        guessCoordinate: "",
+        diffDistance: 0
+      };
+      playersRef.child(1).set(player1);
+      // chatkey=chatRef.push().key;
+      // chatRef.child(chatkey).set({name:playerName});
+      thisPlayer = playerName; //store the player to the player's screen
+      //set the turn indicator to 1
+      database.ref().child("/turn").set(1);
+      database.ref("/result").child("/round").set(0);
 
-            
+      database.ref("/players/1").onDisconnect().remove();
 
-        }//if there is no player one
-        else if (player2 === null)
-        {
-            //initialize player1 object
-            player2 = {
-                name: playerName,
-                win: 0,
-                loss: 0,
-                tie: 0,
-                guessCoordinate:"",
-                diffDistance:0
-            };
-            playersRef.child(2).set(player2);
-            database.ref("/result").child("/round").set(0);
-            // chatkey=chatRef.push().key;
-            // chatRef.child(chatkey).set({name:playerName});
-            thisPlayer=playerName;
-            database.ref("/players/2").onDisconnect().remove();
 
-        }
+
+    }//if there is no player one
+    else if (player2 === null) {
+      //initialize player1 object
+      player2 = {
+        name: playerName,
+        win: 0,
+        loss: 0,
+        tie: 0,
+        guessCoordinate: "",
+        diffDistance: 0
+      };
+      playersRef.child(2).set(player2);
+      database.ref("/result").child("/round").set(0);
+      // chatkey=chatRef.push().key;
+      // chatRef.child(chatkey).set({name:playerName});
+      thisPlayer = playerName;
+      database.ref("/players/2").onDisconnect().remove();
+
     }
+  }
 
 
 });
@@ -131,13 +128,29 @@ function Result() {
   }
 }
 
-//Use have users write their user id to a channel, and use security rules to limit the number of users in a room to 2
+//MAP AND IMAGE FUNCTIONS
+//==========================================================
 
+//Array of city objects. When we actually fill out all the city info we can move the array to another JS file to reduce clutter
+var cities = [
+  {
+    name: "New York",
+    lat: 40.7128,
+    lng: -74.0059,
+  },
+];
 
+var randomCity = cities[Math.floor(Math.random() * cities.length)];
+
+var map;
+var infoWindow;
+var service;
+
+var referenceArray = [];
 
 //This is the function for adding the pin-drop map
 function initMap() {
-  //Declare the starting location of the pin on the map
+  //Declare the location of the default map pin
   var myLatLng = { lat: 0, lng: 0 };
 
   //Compiling a new map object
@@ -157,136 +170,67 @@ function initMap() {
 
   //Use a listening event to retrieve the end value of where the marker is dragged to
   google.maps.event.addListener(marker, 'dragend', function () {
-    var lat = marker.getPosition().lat();
-    var lng = marker.getPosition().lng();
+    var guessedLat = marker.getPosition().lat();
+    var guessedLng = marker.getPosition().lng();
 
-    console.log(lat);
-    console.log(lng);
+    console.log(guessedLat);
+    console.log(guessedLng);
 
     //Asssign the lat and lng values of the new marker location to #lat and #lng in the hidden form
-    $('#lat').val(lat);
-    $('#lng').val(lng);
+    $('#lat').val(guessedLat);
+    $('#lng').val(guessedLng);
+
+    //store guessed coordinates for player1
+    playerRef.child("1/guessedLat").set(guessedLat);
+    playerRef.child("1/guessedLng").set(guessedLng);
+
+
+    //Create new LatLng object for players location, pulling lat and lng from firebase
+    var guessedLocation = new google.maps.LatLng(player1.guessedLat, player1.guessedLng);
+
+    //Create new LatLng object for the location of "randomCity"
+    var cityLocation = new google.maps.LatLng(randomCity.lat, randomCity.lng);
 
     //Testing the distance calculation. We would change this to reference the specific location in an array of locations
-    var pinDrop = new google.maps.LatLng(lat, lng);
-
-    //store coordinate for player1
-    playerRef.child("1/guessCoordinate").set(pinDrop);
-    var newYork = new google.maps.LatLng(40.7128, -74.0059);
-
-    var diffDist = google.maps.geometry.spherical.computeDistanceBetween(player1.guessCoordinate, newYork);
+    var diffDist = google.maps.geometry.spherical.computeDistanceBetween(cityLocation, guessedLocation);
 
     //store difference distance for player1
     playersRef.child("1/diffDistance").set(diffDist);
 
+    //closing drag end event listener
+  });
 
-  })
-};
+  //Establishing search request to Google Maps Places Library
+  var request = {
+    location: citySearch,
+    radius: 5000,
+    keyword: randomCity.name,
+  };
 
-//Array of city objects. When we actually fill out all the city info we can move the array to another JS file to reduce clutter
-var cities = [
-  {
-    name: "New York",
-    lat: 40.7128,
-    lng: -74.0059,
-  },
-  {
-    name: "etc",
-    lat: 0.00,
-    lng: 0.00
-  }
-];
+  infoWindow = new google.maps.InfoWindow();
+  service = new google.maps.places.PlacesService(map);
+  //Function for running search and assigning what's returned to a callback function
+  service.nearbySearch(request, callback);
 
-var randomCity = cities[Math.floor(Math.random() * cities.length)];
-//var numberResults = 10
-
-//Doing AJAX call to Google Places for the photos
-var apiKey = "AIzaSyB5-USGgBJR6SQE5bE-A8c58TcHkomHDck";
-var radius = 5000;
-var queryURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + apiKey;
-queryURL += "&radius=" + radius;
-queryURL += "&keyword=" + randomCity.name;
-queryURL += "&location=" + randomCity.lat + "," + randomCity.lng;
-
-
-function runQuery(queryURL) {
-  $.ajax({ url: queryURL, method: "GET" })
-    .done(function (response) {
-
-      $('#photos').empty();
-
-      var results = response.results;
-
-      for (var i = 0; i < results.length; i++) {
-
-        if (typeOf(results[i].photos) !== "undefined") {
-          returnedPhoto = results[i].photos[0].photo_reference;
-          photoReferences.push(returnedPhoto);
-        }
-      }
-    })
-//closing runQuery function
-};
-
-
-//function for display target destination photos
-function displayPlacePhotos()
-  {
-    //tmp array for testing purpose
-    var photoRefIds=["https://lh6.googleusercontent.com/-IoCBf7ZHrCs/V4dZSvupvzI/AAAAAAAA0mQ/YxzSoz0FiKg-kUdmimLSPk3sG-Bs0f5qACJkC/w400-h400-k/","https://lh3.googleusercontent.com/-C4-0ZpPCcLM/WE74Ae8DFYI/AAAAAAAB1Jw/8qF8gy2h5ioaMtnJxMZs61yRMJ_HLW81ACLIB/w400-h400-k/"];
-    var carouselId="photoCarousel";
-    var carouselRow=$("<div>");
-    carouselRow.addClass("row");
-    var carouselCol=$("<div>");
-    carouselCol.addClass("col-md-8 col-md-offset-3");
-    var carouselContent=$("<div>");
-    carouselContent.addClass("carousel slide");
-    carouselContent.attr("id",carouselId);
-    carouselContent.attr("data-ride","carousel");
-    var carIndicators=$("<ol>");
-    carIndicators.addClass("carousel-indicators");
-    var carInner=$("<div>");
-    carInner.addClass("carousel-inner");
-    carInner.attr("role","listbox");
-
-    for(var i =0; i< photoRefIds.length;i++)
-    {
-      //list tags for carousel indicators section
-      var carList=$("<li>");
-      carList.attr("data-target",carouselId);
-      carList.attr("data-slide-to",i);
-
-      //add items to carousel inner section
-      var carItem=$("<div>");
-      
-      var imgItem=$("<img>");
-      imgItem.attr("src",photoRefIds[i]);
-     
-      if(i===0)
-      {
-        carList.addClass("active");
-        carItem.addClass("item active");
-      }
-      else
-      {
-        carList.addClass("");
-        carItem.addClass("item");
-      }
-      carIndicators.append(carList);
-
-      carItem.append(imgItem);
-      carInner.append(carItem);
-    }
-
-    carouselContent.append(carIndicators);
-    carouselContent.append(carInner);
-    carouselCol.append(carouselContent);
-    //adding left and right arrow
-    carouselContent.append("<a class=\"left carousel-control\" href=\"#photoCarousel\" role=\"button\" data-slide=\"prev\"><span class=\"glyphicon glyphicon-chevron-left\" aria-hidden=\"true\"></span><span class=\"sr-only\">Previous</span></a><a class=\"right carousel-control\" href=\"#photoCarousel\" role=\"button\" data-slide=\"next\"><span class=\"glyphicon glyphicon-chevron-right\" aria-hidden=\"true\"></span><span class=\"sr-only\">Next</span></a>")
-    carouselRow.append(carouselCol);
-
-    // return carouselRow;
-    $("#gamePlay").append(carouselRow);
-// var photoDisp=displayPlacePhotos();
-  // $("#gameplay").append(photoDisp);
+  //Closing initMap();
 }
+//======================================================
+
+function callback(results, status) {
+  if (status !== google.maps.places.PlacesServiceStatus.OK) {
+    console.error(status);
+    return;
+  }
+
+  for (var i = 0, result; result = results[i]; i++) {
+    if (typeof result.photos !== 'undefined') {
+      var cityPhoto = result.photos[0].getUrl({ 'maxWidth': 1140, 'maxHeight': 400 });
+      referenceArray.push(cityPhoto);
+    }
+  }
+}
+
+
+
+
+
