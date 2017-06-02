@@ -18,6 +18,23 @@ var playersRef = database.ref("/players");
 var player1 = null;
 var player2 = null;
 
+//Array of city objects. When we actually fill out all the city info we can move the array to another JS file to reduce clutter
+var cities = [
+  {
+    name: "New York",
+    lat: 40.7128,
+    lng: -74.0059,
+  },
+];
+
+var randomCity = cities[Math.floor(Math.random() * cities.length)];
+
+var map;
+var infoWindow;
+var service;
+
+var referenceArray = [];
+
 $("#addPlayer").click(function () {
   event.preventDefault();
 
@@ -103,14 +120,41 @@ playersRef.on("value", function (snapshot) {
 
   if(player1 && player2)
   {
-    setupGameScreen();
+    // setupGameScreen();
+      var guessMaps=$("<div>");
+  guessMaps.addClass("row");
+  var guessMap1=$("<div>");
+  var guessMap2=$("<div>");
+
+  guessMap1.attr("id","map");
+  guessMap2.attr("id","map2");
+
+  guessMaps.append(guessMap1);
+  guessMaps.append(guessMap2);
+  $("#gamePlay").append(guessMaps);
     initMap();
+
   }
 
 });
 
 function setupGameScreen(){
-  displayPlacePhotos();
+
+  // //get target location photo
+  //  //Establishing search request to Google Maps Places Library
+  //  var cityLocation = new google.maps.LatLng(randomCity.lat, randomCity.lng);
+  // var request = {
+  //   location: cityLocation,
+  //   radius: 5000,
+  //   keyword: randomCity.name,
+  // };
+
+  // infoWindow = new google.maps.InfoWindow();
+  // service = new google.maps.places.PlacesService(map);
+  // //Function for running search and assigning what's returned to a callback function
+  // service.nearbySearch(request, callback);
+
+    displayPlacePhotos();
   var guessMaps=$("<div>");
   guessMaps.addClass("row");
   var guessMap1=$("<div>");
@@ -122,6 +166,8 @@ function setupGameScreen(){
   guessMaps.append(guessMap1);
   guessMaps.append(guessMap2);
   $("#gamePlay").append(guessMaps);
+  initMap();
+
 
 };
 
@@ -150,27 +196,13 @@ function Result() {
 //MAP AND IMAGE FUNCTIONS
 //==========================================================
 
-//Array of city objects. When we actually fill out all the city info we can move the array to another JS file to reduce clutter
-var cities = [
-  {
-    name: "New York",
-    lat: 40.7128,
-    lng: -74.0059,
-  },
-];
 
-var randomCity = cities[Math.floor(Math.random() * cities.length)];
-
-var map;
-var infoWindow;
-var service;
-
-var referenceArray = [];
 
 //This is the function for adding the pin-drop map
 function initMap() {
   //Declare the location of the default map pin
   var myLatLng = { lat: 0, lng: 0 };
+  var cityLocation = new google.maps.LatLng(randomCity.lat, randomCity.lng);
 
   //Compiling a new map object for guessing 
   //this is for player 1's guess map
@@ -270,7 +302,7 @@ function initMap() {
 
   //Establishing search request to Google Maps Places Library
   var request = {
-    location: citySearch,
+    location: cityLocation,
     radius: 5000,
     keyword: randomCity.name,
   };
@@ -292,10 +324,12 @@ function callback(results, status) {
 
   for (var i = 0, result; result = results[i]; i++) {
     if (typeof result.photos !== 'undefined') {
-      var cityPhoto = result.photos[0].getUrl({ 'maxWidth': 1140, 'maxHeight': 400 });
+      var cityPhoto = result.photos[0].getUrl({ 'maxWidth': 1140});
       referenceArray.push(cityPhoto);
     }
   }
+displayPlacePhotos();
+
 }
 //function for display target destination photos
 function displayPlacePhotos()
@@ -356,7 +390,7 @@ function displayPlacePhotos()
     carouselRow.append(carouselCol);
 
     //display the carousel to the gamePlay area
-    $("#gamePlay").append(carouselRow);
+    $("#gamePlay").prepend(carouselRow);
 // var photoDisp=displayPlacePhotos();
   // $("#gameplay").append(photoDisp);
 }
