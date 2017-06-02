@@ -17,6 +17,8 @@ var playersRef = database.ref("/players");
 //variabes for store each players object
 var player1 = null;
 var player2 = null;
+var turn=0;
+var gameInitialized=true;
 
 //Array of city objects. When we actually fill out all the city info we can move the array to another JS file to reduce clutter
 
@@ -25,12 +27,13 @@ var cities
 
 var randomCity = cities[Math.floor(Math.random() * cities.length)];
 
+//these are variables for setting up guess map and getting target destination photos
 var map;
 var infoWindow;
 var service;
-
 var referenceArray = [];
 
+//player enter event
 $("#addPlayer").click(function () {
   event.preventDefault();
 
@@ -114,59 +117,47 @@ playersRef.on("value", function (snapshot) {
     player2 = null;
   }
 
+  //when both players are present, set up the game play screen
   if(player1 && player2)
   {
-    // setupGameScreen();
+    
+    if(gameInitialized)
+    {//define the structure to store players' guess map
       var guessMaps=$("<div>");
-  guessMaps.addClass("row");
-  var guessMap1=$("<div>");
-  var guessMap2=$("<div>");
+      guessMaps.addClass("row");
+      var guessMap1=$("<div>");
+      var guessMap2=$("<div>");
 
-  guessMap1.attr("id","map");
-  guessMap2.attr("id","map2");
+      guessMap1.attr("id","map");
+      guessMap2.attr("id","map2");
 
-  guessMaps.append(guessMap1);
-  guessMaps.append(guessMap2);
-  $("#gamePlay").append(guessMaps);
-    initMap();
+      guessMaps.append(guessMap1);
+      guessMaps.append(guessMap2);
+      $("#gamePlay").append(guessMaps);
+    }
+    //call google map api
+      initMap();
 
   }
 
 });
 
+playersRef.on("child_removed", function (snapshot) {
+  $("#gamePlay").empty();
 
 
-// Result function comparing distance of player1&2 , and displaying the result havent done the restart game button yet 
-function Result() {
-  if (player1.diffDistance > player2.diffDistance) // player2 wins then
-  {
-    player2.win++;
-    player1.lose++;
-    $("#win").text(player2.win);
-    $("#lose").text(player1.lose);
-  }
-  else if (player1.diffDistance < player2.diffDistance) //if player1 wins then 
-  {
-    player1.win++;
-    player2.lose++;
-    $("#win").text(player1.win);
-    $("#lose").text(player2.lose);
-  }
-  else  // incase of a tie
-  {
-    alert("this never happens");
-  }
-}
+});
+
+
 
 //MAP AND IMAGE FUNCTIONS
 //==========================================================
-
-
-
+//Declare the location of the default map pin
+  var myLatLng = { lat: 0, lng: 0 };
 //This is the function for adding the pin-drop map
 function initMap() {
-  //Declare the location of the default map pin
-  var myLatLng = { lat: 0, lng: 0 };
+  
+  //Create new LatLng object for the location of "randomCity"
   var cityLocation = new google.maps.LatLng(randomCity.lat, randomCity.lng);
 
   //Compiling a new map object for guessing 
@@ -177,7 +168,8 @@ function initMap() {
     streetViewControl: false
   });
 
-  //Creating the marker and making it draggable for player to drag 
+  //Creating the marker and making it draggable for player to drag
+  //player1's draggable marker 
   var marker = new google.maps.Marker({
     position: myLatLng,
     map: map,
@@ -185,7 +177,24 @@ function initMap() {
     title: "Drag me!"
   });
 
+  //create player2's guess map
+  var map2 = new google.maps.Map(document.getElementById('map2'), {
+    zoom: 1,
+    center: myLatLng,
+    streetViewControl: false
+  });
+
+  //Creating the marker and making it draggable for player to drag
+  //player2's draggable marker 
+  var marker2 = new google.maps.Marker({
+    position: myLatLng,
+    map: map2,
+    draggable: true,
+    title: "Drag me!"
+  });
+
   //Use a listening event to retrieve the end value of where the marker is dragged to
+  //player1's marker listener for user's drag event
   google.maps.event.addListener(marker, 'dragend', function () {
     var guessedLat = marker.getPosition().lat();
     var guessedLng = marker.getPosition().lng();
@@ -204,10 +213,7 @@ function initMap() {
 
     //Create new LatLng object for players location, pulling lat and lng from firebase
     var guessedLocation = new google.maps.LatLng(player1.guessedLat, player1.guessedLng);
-
-    //Create new LatLng object for the location of "randomCity"
-    var cityLocation = new google.maps.LatLng(randomCity.lat, randomCity.lng);
-
+    myLatLng=guessedLocation;
     //Testing the distance calculation. We would change this to reference the specific location in an array of locations
     var diffDist = google.maps.geometry.spherical.computeDistanceBetween(cityLocation, guessedLocation);
 
@@ -217,23 +223,9 @@ function initMap() {
     //closing drag end event listener
   });
 
-  //Compiling a new map object for guessing 
-  //this is for player 2's guess map
-  var map2 = new google.maps.Map(document.getElementById('map2'), {
-    zoom: 1,
-    center: myLatLng,
-    streetViewControl: false
-  });
-
-  //Creating the marker and making it draggable for player to drag 
-  var marker2 = new google.maps.Marker({
-    position: myLatLng,
-    map: map2,
-    draggable: true,
-    title: "Drag me!"
-  });
 
   //Use a listening event to retrieve the end value of where the marker is dragged to
+  //player2's marker listener for user's drag event
   google.maps.event.addListener(marker2, 'dragend', function () {
     var guessedLat = marker2.getPosition().lat();
     var guessedLng = marker2.getPosition().lng();
@@ -252,10 +244,7 @@ function initMap() {
 
     //Create new LatLng object for players location, pulling lat and lng from firebase
     var guessedLocation = new google.maps.LatLng(player2.guessedLat, player2.guessedLng);
-
-    //Create new LatLng object for the location of "randomCity"
-    var cityLocation = new google.maps.LatLng(randomCity.lat, randomCity.lng);
-
+    myLatLng=guessedLocation;
     //Testing the distance calculation. We would change this to reference the specific location in an array of locations
     var diffDist = google.maps.geometry.spherical.computeDistanceBetween(cityLocation, guessedLocation);
 
@@ -265,17 +254,20 @@ function initMap() {
     //closing drag end event listener
   });
 
-  //Establishing search request to Google Maps Places Library
-  var request = {
-    location: cityLocation,
-    radius: 5000,
-    keyword: randomCity.name,
-  };
+  if(gameInitialized)
+  {//Establishing search request to Google Maps Places Library
+    var request = {
+      location: cityLocation,
+      radius: 5000,
+      keyword: randomCity.name,
+    };
 
-  infoWindow = new google.maps.InfoWindow();
-  service = new google.maps.places.PlacesService(map);
-  //Function for running search and assigning what's returned to a callback function
-  service.nearbySearch(request, callback);
+    infoWindow = new google.maps.InfoWindow();
+    service = new google.maps.places.PlacesService(map);
+    //Function for running search and assigning what's returned to a callback function
+    service.nearbySearch(request, callback);
+    gameInitialized=false;
+  }
 
   //Closing initMap();
 }
@@ -287,16 +279,18 @@ function callback(results, status) {
     return;
   }
 
+  //retreive photos that represent the target destination
   for (var i = 0, result; result = results[i]; i++) {
     if (typeof result.photos !== 'undefined') {
       var cityPhoto = result.photos[0].getUrl({ 'maxWidth': 1140});
       referenceArray.push(cityPhoto);
     }
   }
+ //after we have all the photo, call the diplay function to display images for players to guess the target destination 
 displayPlacePhotos();
 
 }
-//function for display target destination photos
+//function for display target destination photos in a carousel style
 function displayPlacePhotos()
   {
     //tmp array for testing purpose
@@ -362,4 +356,26 @@ function displayPlacePhotos()
 
 
 
+
+// Result function comparing distance of player1&2 , and displaying the result havent done the restart game button yet 
+function Result() {
+  if (player1.diffDistance > player2.diffDistance) // player2 wins then
+  {
+    player2.win++;
+    player1.lose++;
+    $("#win").text(player2.win);
+    $("#lose").text(player1.lose);
+  }
+  else if (player1.diffDistance < player2.diffDistance) //if player1 wins then 
+  {
+    player1.win++;
+    player2.lose++;
+    $("#win").text(player1.win);
+    $("#lose").text(player2.lose);
+  }
+  else  // incase of a tie
+  {
+    alert("this never happens");
+  }
+}
 
