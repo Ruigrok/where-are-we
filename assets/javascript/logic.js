@@ -1,20 +1,22 @@
-// Initialize Firebase
-var config = {
-  apiKey: "AIzaSyB8PdcFQ8isaUyr33dV3cvGydDhMfI9mM0",
-  authDomain: "where-are-we-84538.firebaseapp.com",
-  databaseURL: "https://where-are-we-84538.firebaseio.com",
-  projectId: "where-are-we-84538",
-  storageBucket: "where-are-we-84538.appspot.com",
-  messagingSenderId: "414783702161"
-};
-firebase.initializeApp(config);
 
-//set database object and neccessary groups
-var database = firebase.database();
-var playersRef = database.ref("/players");
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyB8PdcFQ8isaUyr33dV3cvGydDhMfI9mM0",
+    authDomain: "where-are-we-84538.firebaseapp.com",
+    databaseURL: "https://where-are-we-84538.firebaseio.com",
+    projectId: "where-are-we-84538",
+    storageBucket: "where-are-we-84538.appspot.com",
+    messagingSenderId: "414783702161"
+  };
+  firebase.initializeApp(config);
+
+  //set database object and neccessary groups
+  var database = firebase.database();
+  var playersRef=database.ref("/players");
 
 //Empty array to place photoReferences returned from AJAX call
 photoReferences = [];
+
 
 //base url for display place images 
 var baseimageurl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&key=AIzaSyB5-USGgBJR6SQE5bE-A8c58TcHkomHDck&photoreference="
@@ -147,6 +149,99 @@ var infoWindow;
 var service;
 
 var referenceArray = [];
+
+  $("#addPlayer").click(function(){
+    event.preventDefault();
+
+    var playerName=$("#name-input").val().trim();
+
+    //check if both player exists
+    if( !(player1 && player2))
+    {
+        //if there is no player one
+        if (player1 === null)
+        {
+            //initialize player1 object
+            player1 = {
+                name:playerName,
+                win:0,
+                lose:0,
+                guessCoordinate:"",
+                diffDistance:0
+            };
+            playersRef.child(1).set(player1);
+            // chatkey=chatRef.push().key;
+            // chatRef.child(chatkey).set({name:playerName});
+            thisPlayer=playerName; //store the player to the player's screen
+            //set the turn indicator to 1
+            database.ref().child("/turn").set(1);
+            database.ref("/result").child("/round").set(0);
+            
+            database.ref("/players/1").onDisconnect().remove();
+            console.log(player1.name);
+
+            $("#name-form").html("<div class= 'container'>" + "<p>" + "Waiting on Player 2" + "</p>" + "</div>");
+
+
+        }//if there is no player one
+        else if (player2 === null)
+        {
+            //initialize player1 object
+            player2 = {
+                name:playerName,
+                win:0,
+                lose:0,
+                guessCoordinate:"",
+                diffDistance:0
+            };
+            playersRef.child(2).set(player2);
+            database.ref("/result").child("/round").set(0);
+            // chatkey=chatRef.push().key;S
+            // chatRef.child(chatkey).set({name:playerName});
+            thisPlayer=playerName;
+            database.ref("/players/2").onDisconnect().remove();
+            console.log(player2.name);
+
+        }
+
+    }
+     else if (player1 !== null && player2 !== null) {
+          $("body").html('<div class="jumbotron">' + '<h1>' + "Sorry, our game is full, try again later!" + '</h1>' + '</div>');
+        }
+
+
+});
+
+  // Result function comparing distance of player1&2 , and displaying the result 
+
+  // Result function comparing distance of player1&2 , and displaying the result havent done the restart game button yet 
+
+  	function Result()
+  	{
+  		if(player1.diffDistance>player2.diffDistance) // player2 wins then
+  		{
+  			player2.win++;
+  			player1.lose++;
+  			$("#win").text(player2.win);
+  			$("#lose").text(player1.lose);
+  		}
+  		else if(player1.diffDistance<player2.diffDistance) //if player1 wins then 
+  		{
+  			player1.win++;
+  			player2.lose++;
+  			$("#win").text(player1.win);
+  			$("#lose").text(player2.lose);
+  		}
+  		else  // incase of a tie
+  		{
+  			alert("this never happens");
+  		}
+  	}
+
+  //Use have users write their user id to a channel, and use security rules to limit the number of users in a room to 2
+   
+
+
 
 //This is the function for adding the pin-drop map
 function initMap() {
