@@ -138,38 +138,7 @@ playersRef.on("value", function (snapshot) {
 
 });
 
-function setupGameScreen(){
 
-  // //get target location photo
-  //  //Establishing search request to Google Maps Places Library
-  //  var cityLocation = new google.maps.LatLng(randomCity.lat, randomCity.lng);
-  // var request = {
-  //   location: cityLocation,
-  //   radius: 5000,
-  //   keyword: randomCity.name,
-  // };
-
-  // infoWindow = new google.maps.InfoWindow();
-  // service = new google.maps.places.PlacesService(map);
-  // //Function for running search and assigning what's returned to a callback function
-  // service.nearbySearch(request, callback);
-
-    displayPlacePhotos();
-  var guessMaps=$("<div>");
-  guessMaps.addClass("row");
-  var guessMap1=$("<div>");
-  var guessMap2=$("<div>");
-
-  guessMap1.attr("id","map");
-  guessMap2.attr("id","map2");
-
-  guessMaps.append(guessMap1);
-  guessMaps.append(guessMap2);
-  $("#gamePlay").append(guessMaps);
-  initMap();
-
-
-};
 
 // Result function comparing distance of player1&2 , and displaying the result havent done the restart game button yet 
 function Result() {
@@ -233,8 +202,8 @@ function initMap() {
     $('#lng').val(guessedLng);
 
     //store guessed coordinates for player1
-    playerRef.child("1/guessedLat").set(guessedLat);
-    playerRef.child("1/guessedLng").set(guessedLng);
+    playersRef.child("1/guessedLat").set(guessedLat);
+    playersRef.child("1/guessedLng").set(guessedLng);
 
 
     //Create new LatLng object for players location, pulling lat and lng from firebase
@@ -263,7 +232,7 @@ function initMap() {
   //Creating the marker and making it draggable for player to drag 
   var marker2 = new google.maps.Marker({
     position: myLatLng,
-    map: map,
+    map: map2,
     draggable: true,
     title: "Drag me!"
   });
@@ -281,8 +250,8 @@ function initMap() {
     $('#lng').val(guessedLng);
 
     //store guessed coordinates for player1
-    playerRef.child("2/guessedLat").set(guessedLat);
-    playerRef.child("2/guessedLng").set(guessedLng);
+    playersRef.child("2/guessedLat").set(guessedLat);
+    playersRef.child("2/guessedLng").set(guessedLng);
 
 
     //Create new LatLng object for players location, pulling lat and lng from firebase
