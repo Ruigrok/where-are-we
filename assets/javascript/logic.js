@@ -228,15 +228,65 @@ function runQuery(queryURL) {
 //closing runQuery function
 };
 
-//this is for displaying the photos in photo array for user to guess 
-  function displayPlacePhotos()
+
+//function for display target destination photos
+function displayPlacePhotos()
   {
     //tmp array for testing purpose
-    var photoRefIds=["CmRYAAAABLNQO2fSNbBXcTklxQRvH46_UHFvFX315uDSvZijoxiKfesbKysXa1JIqEDcnPmG88rUS9BlJLMqn70TfWmWsYhieZ2U8_cY0ncCjMV6DEuXLhkbW1woMdH7Tmm4yJfCEhC9gjaxON30AZ7u_XkWY-HOGhTBnmlOqZly1cQ5RbDLudPY4hpK8A","CmRYAAAAmeUKPZmrzp3nS3t_967G__PqiCRsVrghtvlM8EREx4NB3-e_8va88jK9zneN6O5KrV4Zea6Kce9GY705UuHVOYC0_9lcT418ePtnJvYdljGZ-bMIx8mt_d_3mdID5vskEhBZMcSG8OhDj47Qx5hxBrWXGhSe3C47BNv4n9cX9p8oETtHAkaxlg","CmRYAAAAyeY60vs4Q5ENh05ygqtvozgogbAt1uJ5VhIL9PuLKOs8jR2b8wyXH4r3txDYlxoU1cS1VNIOesl3TXDc4xU-1eHZMod8KMZEjYtSXscaNPuorrfUN-7khGisSKy2A1AvEhBi_1C1S7xN6uNDMBgDzw9bGhQmMb6o8-cq6DkY5eZTUvdhGlFp6Q"];
+    var photoRefIds=["https://lh6.googleusercontent.com/-IoCBf7ZHrCs/V4dZSvupvzI/AAAAAAAA0mQ/YxzSoz0FiKg-kUdmimLSPk3sG-Bs0f5qACJkC/w400-h400-k/","https://lh3.googleusercontent.com/-C4-0ZpPCcLM/WE74Ae8DFYI/AAAAAAAB1Jw/8qF8gy2h5ioaMtnJxMZs61yRMJ_HLW81ACLIB/w400-h400-k/"];
+    var carouselId="photoCarousel";
+    var carouselRow=$("<div>");
+    carouselRow.addClass("row");
+    var carouselCol=$("<div>");
+    carouselCol.addClass("col-md-8 col-md-offset-3");
+    var carouselContent=$("<div>");
+    carouselContent.addClass("carousel slide");
+    carouselContent.attr("id",carouselId);
+    carouselContent.attr("data-ride","carousel");
+    var carIndicators=$("<ol>");
+    carIndicators.addClass("carousel-indicators");
+    var carInner=$("<div>");
+    carInner.addClass("carousel-inner");
+    carInner.attr("role","listbox");
 
     for(var i =0; i< photoRefIds.length;i++)
     {
+      //list tags for carousel indicators section
+      var carList=$("<li>");
+      carList.attr("data-target",carouselId);
+      carList.attr("data-slide-to",i);
+
+      //add items to carousel inner section
+      var carItem=$("<div>");
       
+      var imgItem=$("<img>");
+      imgItem.attr("src",photoRefIds[i]);
+     
+      if(i===0)
+      {
+        carList.addClass("active");
+        carItem.addClass("item active");
+      }
+      else
+      {
+        carList.addClass("");
+        carItem.addClass("item");
+      }
+      carIndicators.append(carList);
+
+      carItem.append(imgItem);
+      carInner.append(carItem);
     }
 
-  }
+    carouselContent.append(carIndicators);
+    carouselContent.append(carInner);
+    carouselCol.append(carouselContent);
+    //adding left and right arrow
+    carouselContent.append("<a class=\"left carousel-control\" href=\"#photoCarousel\" role=\"button\" data-slide=\"prev\"><span class=\"glyphicon glyphicon-chevron-left\" aria-hidden=\"true\"></span><span class=\"sr-only\">Previous</span></a><a class=\"right carousel-control\" href=\"#photoCarousel\" role=\"button\" data-slide=\"next\"><span class=\"glyphicon glyphicon-chevron-right\" aria-hidden=\"true\"></span><span class=\"sr-only\">Next</span></a>")
+    carouselRow.append(carouselCol);
+
+    // return carouselRow;
+    $("#gamePlay").append(carouselRow);
+// var photoDisp=displayPlacePhotos();
+  // $("#gameplay").append(photoDisp);
+}
