@@ -111,6 +111,9 @@ function Result() {
             database.ref("/players/1").onDisconnect().remove();
             console.log(player1.name);
 
+            $("#name-form").html("<div class= 'container'>" + "<p>" + "Waiting on Player 2" + "</p>" + "</div>");
+
+
         }//if there is no player one
         else if (player2 === null)
         {
