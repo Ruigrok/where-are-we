@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
   // Initialize Firebase
   var config = {
     apiKey: "AIzaSyB8PdcFQ8isaUyr33dV3cvGydDhMfI9mM0",
@@ -13,25 +13,10 @@
   //set database object and neccessary groups
   var database = firebase.database();
   var playersRef=database.ref("/players");
-=======
-// Initialize Firebase
-var config = {
-  apiKey: "AIzaSyB8PdcFQ8isaUyr33dV3cvGydDhMfI9mM0",
-  authDomain: "where-are-we-84538.firebaseapp.com",
-  databaseURL: "https://where-are-we-84538.firebaseio.com",
-  projectId: "where-are-we-84538",
-  storageBucket: "where-are-we-84538.appspot.com",
-  messagingSenderId: "414783702161"
-};
-firebase.initializeApp(config);
-
-//set database object and neccessary groups
-var database = firebase.database();
-var playersRef = database.ref("/players");
 
 //Empty array to place photoReferences returned from AJAX call
 photoReferences = [];
->>>>>>> 397d3a7d1f74732ff0ff123c6fa6d6051c82fc23
+
 
 //base url for display place images 
 var baseimageurl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&key=AIzaSyB5-USGgBJR6SQE5bE-A8c58TcHkomHDck&photoreference="
@@ -94,8 +79,7 @@ function Result() {
 
 //Use have users write their user id to a channel, and use security rules to limit the number of users in a room to 2
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 
   $("#addPlayer").click(function(){
     event.preventDefault();
@@ -125,6 +109,7 @@ function Result() {
             database.ref("/result").child("/round").set(0);
             
             database.ref("/players/1").onDisconnect().remove();
+            console.log(player1.name);
 
         }//if there is no player one
         else if (player2 === null)
@@ -139,21 +124,26 @@ function Result() {
             };
             playersRef.child(2).set(player2);
             database.ref("/result").child("/round").set(0);
-            // chatkey=chatRef.push().key;
+            // chatkey=chatRef.push().key;S
             // chatRef.child(chatkey).set({name:playerName});
             thisPlayer=playerName;
             database.ref("/players/2").onDisconnect().remove();
+            console.log(player2.name);
 
         }
+
     }
+     else if (player1 !== null && player2 !== null) {
+          $("body").html('<div class="jumbotron">' + '<h1>' + "Sorry, our game is full, try again later!" + '</h1>' + '</div>');
+        }
 
 
 });
 
   // Result function comparing distance of player1&2 , and displaying the result 
-=======
+
   // Result function comparing distance of player1&2 , and displaying the result havent done the restart game button yet 
->>>>>>> aec353794cbdf63f0f2fb2ae6904cfca2254cebe
+
   	function Result()
   	{
   		if(player1.diffDistance>player2.diffDistance) // player2 wins then
@@ -178,8 +168,7 @@ function Result() {
 
   //Use have users write their user id to a channel, and use security rules to limit the number of users in a room to 2
    
-=======
->>>>>>> 397d3a7d1f74732ff0ff123c6fa6d6051c82fc23
+
 
 
 //This is the function for adding the pin-drop map
