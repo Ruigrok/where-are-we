@@ -131,7 +131,7 @@ playersRef.on("value", function (snapshot) {
   if(player1 && player2)
   {
 
-<<<<<<< HEAD
+
     $("#timer").show();
     setInterval(function(){
       time--;
@@ -141,10 +141,8 @@ playersRef.on("value", function (snapshot) {
       }
     }, 1000);
 
-=======
 
-    
->>>>>>> feature/resultScreen
+
     
     if(gameInitialized)
     {//define the structure to store players' guess map
@@ -322,15 +320,11 @@ function callback(results, status) {
       referenceArray.push(cityPhoto);
     }
   }
-<<<<<<< HEAD
-  
- //after we have all the photo, call the diplay function to display images for players to guess the target destination 
-displayPlacePhotos();
-=======
+
+
   //store photoRefernce array into firebase
   database.ref("/photoReference").set(referenceArray);
 
->>>>>>> feature/resultScreen
 
 }
 //function for display target destination photos in a carousel style
