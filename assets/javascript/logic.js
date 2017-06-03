@@ -68,7 +68,7 @@ $("#addPlayer").click(function () {
       // database.ref("/result").child("/round").set(0);
 
       database.ref("/players/1").onDisconnect().remove();
-      $("#name-form").html("<h1>"+"Waiting on Player 2 to join!" + "</h1>");
+      $("#name-form").html("<div class= 'jumbotron' id='plm'>" + "<h3>" + "Waiting on Player 2 to join!" + "</h3>" + "</div>");
       $("#instructions").hide();
 
 
@@ -136,6 +136,7 @@ playersRef.on("value", function (snapshot) {
       guessMaps.append(guessMap2);
       $("#gamePlay").append(guessMaps);
       $("#instructions").hide();
+      $("#plm").hide();
     }
     //call google map api
       initMap();
