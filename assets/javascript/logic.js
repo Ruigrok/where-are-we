@@ -169,7 +169,7 @@ playersRef.on("value", function (snapshot) {
   //When both players diffDistance values are in, call result function
   if(player1.diffDistance !== 0 && player2.diffDistance !== 0)
   {
-    Result();
+    endGame();
   }
 
 });
@@ -395,7 +395,7 @@ function displayPlacePhotos()
 
 
 // Result function comparing distance of player1&2 , and displaying the result havent done the restart game button yet 
-function Result() {
+function endGame() {
 
   if (player1.diffDistance > player2.diffDistance) // player2 wins then
   {
