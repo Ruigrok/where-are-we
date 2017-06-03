@@ -68,6 +68,8 @@ $("#addPlayer").click(function () {
       // database.ref("/result").child("/round").set(0);
 
       database.ref("/players/1").onDisconnect().remove();
+      $("#name-form").html("<h1>"+"Waiting on Player 2 to join!" + "</h1>");
+      $("#instructions").hide();
 
 
 
@@ -133,6 +135,7 @@ playersRef.on("value", function (snapshot) {
       guessMaps.append(guessMap1);
       guessMaps.append(guessMap2);
       $("#gamePlay").append(guessMaps);
+      $("#instructions").hide();
     }
     //call google map api
       initMap();
