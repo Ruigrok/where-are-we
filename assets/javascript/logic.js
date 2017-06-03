@@ -20,9 +20,7 @@ var player2 = null;
 var turn=0;
 var gameInitialized=true;
 
-//Array of city objects. When we actually fill out all the city info we can move the array to another JS file to reduce clutter
-
-
+//Select randomCity from cities array in citiesData.js
 var randomCity = cities[Math.floor(Math.random() * cities.length)];
 
 //these are variables for setting up guess map and getting target destination photos
@@ -41,11 +39,13 @@ $("#addPlayer").click(function () {
   //   name:"";
   //   win:0;
   //   lose:0;
-  //   guessCoordinate:"";
+  //   guessedLat: "";
+  //   guessedLng: "";
   //   diffDistance:0;
   // }
 
-  //check if both player exists
+
+  //check if there aren't two players alaready in game
   if (!(player1 && player2)) {
     //if there is no player one
     if (player1 === null) {
