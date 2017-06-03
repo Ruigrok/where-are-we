@@ -30,6 +30,7 @@ var map;
 var infoWindow;
 var service;
 var referenceArray = [];
+var time = 100;
 
 //player enter event
 $("#addPlayer").click(function () {
@@ -118,6 +119,16 @@ playersRef.on("value", function (snapshot) {
   //when both players are present, set up the game play screen
   if(player1 && player2)
   {
+
+    $("#timer").show();
+    setInterval(function(){
+      time--;
+      $("#timer").text(time);
+      if(time === 0){
+        //need function here to hide game screen and show results screen
+      }
+    }, 1000);
+
     
     if(gameInitialized)
     {//define the structure to store players' guess map
