@@ -96,6 +96,15 @@ $("#addPlayer").click(function () {
 
 });
 
+database.ref("/photoReference").on("value", function(snap){
+  if(snap.exists())
+  {
+    referenceArray=snap.val();
+    displayPlacePhotos();
+  }
+
+});
+
 //this is monitoring the value add in players group in the database
 playersRef.on("value", function (snapshot) {
   if (snapshot.child("1").exists()) {
@@ -118,6 +127,9 @@ playersRef.on("value", function (snapshot) {
   //when both players are present, set up the game play screen
   if(player1 && player2)
   {
+
+
+    
     
     if(gameInitialized)
     {//define the structure to store players' guess map
@@ -143,7 +155,9 @@ playersRef.on("value", function (snapshot) {
 
 playersRef.on("child_removed", function (snapshot) {
   $("#gamePlay").empty();
-
+  gameInitialized=true;
+  database.ref("/photoReference").remove();
+  referenceArray=[];
 
 });
 
@@ -285,8 +299,9 @@ function callback(results, status) {
       referenceArray.push(cityPhoto);
     }
   }
- //after we have all the photo, call the diplay function to display images for players to guess the target destination 
-displayPlacePhotos();
+  //store photoRefernce array into firebase
+  database.ref("/photoReference").set(referenceArray);
+
 
 }
 //function for display target destination photos in a carousel style
