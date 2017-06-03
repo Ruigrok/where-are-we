@@ -141,10 +141,16 @@ playersRef.on("value", function (snapshot) {
       }
     }, 1000);
 
-
-
+    //create game play screen
+    gamePlay();
     
-    if(gameInitialized)
+
+
+  }
+
+  function gamePlay()
+  {
+        if(gameInitialized)
     {//define the structure to store players' guess map
       var guessMaps=$("<div>");
       guessMaps.addClass("row");
@@ -163,7 +169,6 @@ playersRef.on("value", function (snapshot) {
     }
     //call google map api
       initMap();
-
   }
 
   //When both players diffDistance values are in, call result function
@@ -420,8 +425,6 @@ function endGame() {
     playersRef.child("/2/tie").set(player2.tie);
     playersRef.child("/1/tie").set(player1.tie);
   }
-
-
 
 }
 
