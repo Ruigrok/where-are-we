@@ -130,8 +130,9 @@ playersRef.on("value", function (snapshot) {
       var guessMaps=$("<div>");
       guessMaps.addClass("row");
       var guessMap1=$("<div>");
+      guessMap1.addClass("col-md-6")
       var guessMap2=$("<div>");
-
+      guessMap2.addClass("col-md-6");
       guessMap1.attr("id","map");
       guessMap2.attr("id","map2");
 
@@ -305,7 +306,7 @@ function displayPlacePhotos()
     var carouselRow=$("<div>");
     carouselRow.addClass("row");
     var carouselCol=$("<div>");
-    carouselCol.addClass("col-md-8 col-md-offset-3");
+    carouselCol.addClass("col-md-12");
     var carouselContent=$("<div>");
     carouselContent.addClass("carousel slide");
     carouselContent.attr("id",carouselId);
