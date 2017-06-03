@@ -1,3 +1,5 @@
+
+
 var cities = [
     {
         name: "New York",
@@ -45,9 +47,6 @@ var cities = [
         lng: -43.9352,
     },
     {
-        name: 
-    }
-    {
         name: "London",
         lat: 51.5074,
         lng: -0.1278,
@@ -62,25 +61,21 @@ var cities = [
         lat: 40.4168,
         lng: 3.7038,
     },
-
     {
         name: "Munich",
         lat: 48.1351,
         lng: 11.5820,
     },
-
     {
         name: "Moscow",
         lat: 55.7558,
         lng: 37.6173,
     },
-
     {
         name: "Berlin",
         lat: 52.5200,
         lng: 13.4050,
     },
-
     {
         name: "Budapest",
         lat: 47.4979,
@@ -92,55 +87,46 @@ var cities = [
         lat: 53.9045,
         lng: 27.5615,
     },
-
     {
         name: "Prague",
         lat: 50.0755,
         lng: 14.4378,
     },
-
     {
         name: "Odessa",
         lat: 46.4825,
         lng: 30.7233,
     },
-
     {
         name: "Torino",
         lat: 45.0703,
         lng: 7.6869,
     },
-
     {
         name: "Saratov",
         lat: 51.5924,
         lng: 45.9608,
     },
-
     {
         name: "Sevilla",
         lat: 37.3891,
         lng: 5.9845,
     },
-
     {
         name: "Irkutsk",
         lat: 52.2870,
         lng: 104.3050,
     },
-
     {
         name: "Stuttgart",
         lat: 48.7758,
         lng: 9.1829,
     },
-
     {
         name: "Copenhagen",
         lat: 55.6761,
         lng: 12.5683,
     },
-
     {
         name: "Oslo",
         lat: 12.5683,

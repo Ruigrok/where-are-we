@@ -21,13 +21,9 @@ var turn=0;
 var gameInitialized=true;
 
 //Array of city objects. When we actually fill out all the city info we can move the array to another JS file to reduce clutter
-var cities = [
-  {
-    name: "New York",
-    lat: 40.7128,
-    lng: -74.0059,
-  },
-];
+
+//The array of object names is in the citiesData.js file
+var cities
 
 var randomCity = cities[Math.floor(Math.random() * cities.length)];
 
