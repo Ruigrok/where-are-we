@@ -22,8 +22,6 @@ var gameInitialized=true;
 
 //Array of city objects. When we actually fill out all the city info we can move the array to another JS file to reduce clutter
 
-//The array of object names is in the citiesData.js file
-var cities
 
 var randomCity = cities[Math.floor(Math.random() * cities.length)];
 

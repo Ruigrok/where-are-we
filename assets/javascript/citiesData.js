@@ -426,7 +426,7 @@ var cities = [
         name: "Oakland",
         lat: 37.8044,
         lng: -122.2711,
-    },
+    }
 
 ];
 
