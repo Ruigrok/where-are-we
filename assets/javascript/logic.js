@@ -121,6 +121,20 @@ playersRef.on("value", function (snapshot) {
     
     if(gameInitialized)
     {//define the structure to store players' guess map
+	var playernames=$("<div>");
+	playernames.addClass("row");
+	var playername1=$("<div>");
+	playername1.addClass("col-md-6");
+	playername1.attr("id","name1");
+	playername1.append(player1.name);
+	var playername2=$("<div>");
+	playername2.addClass("col-md-6");	
+	playername2.attr("id","name2");
+	playername2.append(player2.name);
+	playernames.append(playername1);
+	playernames.append(playername2);	
+	$("#gamePlay").append(playernames);
+
       var guessMaps=$("<div>");
       guessMaps.addClass("row");
       var guessMap1=$("<div>");
