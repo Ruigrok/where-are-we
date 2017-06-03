@@ -20,7 +20,9 @@ var player2 = null;
 var turn=0;
 var gameInitialized=true;
 
-//Select randomCity from cities array in citiesData.js
+//Array of city objects. When we actually fill out all the city info we can move the array to another JS file to reduce clutter
+
+
 var randomCity = cities[Math.floor(Math.random() * cities.length)];
 
 //these are variables for setting up guess map and getting target destination photos
@@ -39,13 +41,11 @@ $("#addPlayer").click(function () {
   //   name:"";
   //   win:0;
   //   lose:0;
-  //   guessedLat: "";
-  //   guessedLng: "";
+  //   guessCoordinate:"";
   //   diffDistance:0;
   // }
 
-
-  //check if there aren't two players alaready in game
+  //check if both player exists
   if (!(player1 && player2)) {
     //if there is no player one
     if (player1 === null) {
@@ -137,6 +137,12 @@ playersRef.on("value", function (snapshot) {
     //call google map api
       initMap();
 
+  }
+
+  //When both players diffDistance values are in, call result function
+  if(player1.diffDistance !== 0 && player2.diffDistance !== 0)
+  {
+    Result();
   }
 
 });
@@ -285,6 +291,7 @@ function callback(results, status) {
       referenceArray.push(cityPhoto);
     }
   }
+  
  //after we have all the photo, call the diplay function to display images for players to guess the target destination 
 displayPlacePhotos();
 
@@ -358,23 +365,34 @@ function displayPlacePhotos()
 
 // Result function comparing distance of player1&2 , and displaying the result havent done the restart game button yet 
 function Result() {
+
   if (player1.diffDistance > player2.diffDistance) // player2 wins then
   {
     player2.win++;
-    player1.lose++;
-    $("#win").text(player2.win);
-    $("#lose").text(player1.lose);
+    player1.loss++;
+    playersRef.child("/1/loss").set(player1.loss);
+    playersRef.child("/2/win").set(player2.win);
+
   }
   else if (player1.diffDistance < player2.diffDistance) //if player1 wins then 
   {
     player1.win++;
     player2.lose++;
-    $("#win").text(player1.win);
-    $("#lose").text(player2.lose);
+    playersRef.child("/2/loss").set(player2.loss);
+    playersRef.child("/1/win").set(player1.win);
   }
   else  // incase of a tie
   {
-    alert("this never happens");
+    //alert("this never happens");
+    player1.tie++;
+    player2.tie++;
+    playersRef.child("/2/tie").set(player2.tie);
+    playersRef.child("/1/tie").set(player1.tie);
   }
+
+
+
 }
+
+
 
