@@ -18,3 +18,21 @@
     background-color: grey;
 }
 
+#map
+{
+	border: solid black 4px;
+}
+
+#map2
+{
+	border: solid black 4px;
+}
+
+#name1
+{
+	text-align: center;
+}
+#name2
+{
+	text-align: center;
+}
