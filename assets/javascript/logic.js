@@ -1,4 +1,7 @@
 // Initialize Firebase
+
+// need to work on the submit button , once the submit clicks it will switch turns to (2) , if it was on (2) it will call the endgame function
+
 var config = {
   apiKey: "AIzaSyB8PdcFQ8isaUyr33dV3cvGydDhMfI9mM0",
   authDomain: "where-are-we-84538.firebaseapp.com",
@@ -160,10 +163,13 @@ playersRef.on("value", function (snapshot) {
       guessMap2.addClass("col-md-6");
       guessMap1.attr("id","map");
       guessMap2.attr("id","map2");
-
       guessMaps.append(guessMap1);
       guessMaps.append(guessMap2);
+      var button=$("<button>");
+      button.attr("id","submit");
+      button.text("submit Answer");
       $("#gamePlay").append(guessMaps);
+      $("#gamePlay").append(button);
       $("#instructions").hide();
       $("#plm").hide();
     }
