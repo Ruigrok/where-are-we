@@ -22,6 +22,7 @@ var player1 = null;
 var player2 = null;
 var turn=0;
 var gameInitialized=true;
+var playerName = "";
 
 //Array of city objects. When we actually fill out all the city info we can move the array to another JS file to reduce clutter
 
@@ -38,16 +39,21 @@ var time = 100;
 //player enter event
 $("#addPlayer").click(function () {
   event.preventDefault();
+  if ($("#name-input").val() !== ""){
+    playerName = $("#name-input").val().trim();;
+    enterGame();
+  }
+});
 
-  var playerName = $("#name-input").val().trim();
-  //Player object will look like this:
-  // player#={
-  //   name:"";
-  //   win:0;
-  //   lose:0;
-  //   guessCoordinate:"";
-  //   diffDistance:0;
-  // }
+$("#name-input").keypress(function(e) {
+  if (e.keycode === 13 && $("#name-input").val() !== "") {
+    playerName = $("#name-input").val().trim();
+    enterGame();
+  }
+});
+
+
+function enterGame() {
 
   //check if both player exists
   if (!(player1 && player2)) {
@@ -60,7 +66,7 @@ $("#addPlayer").click(function () {
         loss: 0,
         tie: 0,
         guessedLat: 0,
-        guessedLng:0,
+        guessedLng: 0,
         diffDistance: 0
       };
       playersRef.child(1).set(player1);
@@ -75,8 +81,6 @@ $("#addPlayer").click(function () {
       $("#name-form").html("<div class= 'jumbotron' id='plm'>" + "<h3>" + "Waiting on Player 2 to join!" + "</h3>" + "</div>");
       $("#instructions").hide();
 
-
-
     }//if there is no player one
     else if (player2 === null) {
       //initialize player1 object
@@ -86,7 +90,7 @@ $("#addPlayer").click(function () {
         loss: 0,
         tie: 0,
         guessedLat: 0,
-        guessedLng:0,
+        guessedLng: 0,
         diffDistance: 0
       };
       playersRef.child(2).set(player2);
@@ -95,12 +99,9 @@ $("#addPlayer").click(function () {
       // chatRef.child(chatkey).set({name:playerName});
       thisPlayer = playerName;
       database.ref("/players/2").onDisconnect().remove();
-
     }
   }
-
-
-});
+};
 
 database.ref("/photoReference").on("value", function(snap){
   if(snap.exists())
