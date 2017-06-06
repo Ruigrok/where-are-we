@@ -29,7 +29,7 @@ var roundEnd=true;
 //Array of city objects. When we actually fill out all the city info we can move the array to another JS file to reduce clutter
 
 
-var randomCity = cities[Math.floor(Math.random() * cities.length)];
+var randomCity;
 
 //these are variables for setting up guess map and getting target destination photos
 var map;
@@ -123,6 +123,8 @@ function enterGame() {
       //set the turn indicator to 1
       database.ref().child("/turn").set(1);
       // database.ref("/result").child("/round").set(0);
+      randomCity = cities[Math.floor(Math.random() * cities.length)];
+      database.ref().child("/targetCity").set(randomCity);
 
       database.ref("/players/1").onDisconnect().remove();
       $("#name-form").html("<div class= 'jumbotron' id='plm'>" + "<h3>" + "Waiting on Player 2 to join!" + "</h3>" + "</div>");
@@ -213,11 +215,26 @@ playersRef.on("child_removed", function (snapshot) {
   referenceArray=[];
   turn=0;
   database.ref().child("/turn").remove();
+  database.ref().child("targetCity").remove();
+  database.ref().child("result").remove();
 
 });
 
 database.ref().child("/turn").on("value",function(snap){
   turn=snap.val();
+
+});
+
+database.ref().child("/targetCity").on("value",function(snap){
+  randomCity=snap.val();
+});
+
+database.ref().child("/result").on("value",function(snap){
+
+  if(snap.exists())
+  {
+    $("#gamePlay").html(snap.val());
+  }
 
 });
 
@@ -473,7 +490,7 @@ function endGame() {
     playersRef.child("/1/loss").set(player1.loss);
     player2.win++;
     playersRef.child("/2/win").set(player2.win);
-    database.ref().child("/turn").set(1);
+    
   }
   else if (player1.diffDistance < player2.diffDistance) //if player1 wins then 
   {
@@ -482,7 +499,7 @@ function endGame() {
     playersRef.child("/2/loss").set(player2.loss);
     player1.win++;
     playersRef.child("/1/win").set(player1.win);
-    database.ref().child("/turn").set(1);
+  
 
   }
   else  // incase of a tie
@@ -493,11 +510,18 @@ function endGame() {
     playersRef.child("/2/tie").set(player2.tie);
     player1.tie++;
     playersRef.child("/1/tie").set(player1.tie);
-    database.ref().child("/turn").set(1);
+
   }
-      
+  database.ref().child("/turn").set(1);    
+  resultScreen()
 
 }
 
+function resultScreen()
+{
+
+  database.ref().child("/result").set("<p>Result:</p><p>These photo are from: "+ randomCity.name+"</p><p>Players Scores:</p><p>"+player1.name+" win: "+player1.win+" loss: "+ player1.loss+"</p><p>"+ player2.name+" win: "+player2.win+" loss: "+player2.loss+"</p>");
+
+}
 
 
