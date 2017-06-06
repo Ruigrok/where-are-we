@@ -24,6 +24,7 @@ var turn=0;
 var gameInitialized=true;
 var playerName = "";
 var thisPlayer;
+var roundEnd=true;
 
 //Array of city objects. When we actually fill out all the city info we can move the array to another JS file to reduce clutter
 
@@ -71,7 +72,8 @@ $("body").on("click","button", function(){
   if(turn ===2 && player2.name === thisPlayer)
   {
      storeGuessCoor_Diff("2");
-    database.ref().child("/turn").set(1);
+        //When both players diffDistance values are in, call result function
+      endGame();
   }
   else
   {
@@ -153,6 +155,9 @@ database.ref("/photoReference").on("value", function(snap){
   {
     referenceArray=snap.val();
     displayPlacePhotos();
+  }else
+  {
+    referenceArray=[];
   }
 
 });
@@ -193,13 +198,8 @@ playersRef.on("value", function (snapshot) {
     //create game play screen
     gamePlay();
 
-      //When both players diffDistance values are in, call result function
-      if(player1.diffDistance !== 0 && player2.diffDistance !== 0)
-      {
-        endGame();
-      }
-
   }
+
 
 
 
@@ -208,6 +208,7 @@ playersRef.on("value", function (snapshot) {
 playersRef.on("child_removed", function (snapshot) {
   $("#gamePlay").empty();
   gameInitialized=true;
+  roundEnd=true;
   database.ref("/photoReference").remove();
   referenceArray=[];
   turn=0;
@@ -255,9 +256,11 @@ database.ref().child("/turn").on("value",function(snap){
       $("#gamePlay").append(button);
       $("#instructions").hide();
       $("#plm").hide();
-    }
-    //call google map api
+
+      //call google map api
       initMap();
+    }
+
   }
 
 //MAP AND IMAGE FUNCTIONS
@@ -465,27 +468,34 @@ function endGame() {
 
   if (player1.diffDistance > player2.diffDistance) // player2 wins then
   {
-    player2.win++;
+    
     player1.loss++;
     playersRef.child("/1/loss").set(player1.loss);
+    player2.win++;
     playersRef.child("/2/win").set(player2.win);
-
+    database.ref().child("/turn").set(1);
   }
   else if (player1.diffDistance < player2.diffDistance) //if player1 wins then 
   {
-    player1.win++;
-    player2.lose++;
+    
+    player2.loss++;
     playersRef.child("/2/loss").set(player2.loss);
+    player1.win++;
     playersRef.child("/1/win").set(player1.win);
+    database.ref().child("/turn").set(1);
+
   }
   else  // incase of a tie
   {
     //alert("this never happens");
-    player1.tie++;
+    
     player2.tie++;
     playersRef.child("/2/tie").set(player2.tie);
+    player1.tie++;
     playersRef.child("/1/tie").set(player1.tie);
+    database.ref().child("/turn").set(1);
   }
+      
 
 }
 
