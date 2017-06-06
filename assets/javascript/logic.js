@@ -147,28 +147,45 @@ playersRef.on("value", function (snapshot) {
 
     //create game play screen
     gamePlay();
-    
 
+      //When both players diffDistance values are in, call result function
+      if(player1.diffDistance !== 0 && player2.diffDistance !== 0)
+      {
+        endGame();
+      }
 
   }
 
+
+
+
+});
+
+playersRef.on("child_removed", function (snapshot) {
+  $("#gamePlay").empty();
+  gameInitialized=true;
+  database.ref("/photoReference").remove();
+  referenceArray=[];
+
+});
+
   function gamePlay()
   {
-        if(gameInitialized)
+    if(gameInitialized)
     {//define the structure to store players' guess map
-	var playernames=$("<div>");
-	playernames.addClass("row");
-	var playername1=$("<div>");
-	playername1.addClass("col-md-6");
-	playername1.attr("id","name1");
-	playername1.append(player1.name);
-	var playername2=$("<div>");
-	playername2.addClass("col-md-6");	
-	playername2.attr("id","name2");
-	playername2.append(player2.name);
-	playernames.append(playername1);
-	playernames.append(playername2);	
-	$("#gamePlay").append(playernames);
+      var playernames=$("<div>");
+      playernames.addClass("row");
+      var playername1=$("<div>");
+      playername1.addClass("col-md-6");
+      playername1.attr("id","name1");
+      playername1.append(player1.name);
+      var playername2=$("<div>");
+      playername2.addClass("col-md-6"); 
+      playername2.attr("id","name2");
+      playername2.append(player2.name);
+      playernames.append(playername1);
+      playernames.append(playername2);  
+      $("#gamePlay").append(playernames);
 
       var guessMaps=$("<div>");
       guessMaps.addClass("row");
@@ -191,24 +208,6 @@ playersRef.on("value", function (snapshot) {
     //call google map api
       initMap();
   }
-
-  //When both players diffDistance values are in, call result function
-  if(player1.diffDistance !== 0 && player2.diffDistance !== 0)
-  {
-    endGame();
-  }
-
-});
-
-playersRef.on("child_removed", function (snapshot) {
-  $("#gamePlay").empty();
-  gameInitialized=true;
-  database.ref("/photoReference").remove();
-  referenceArray=[];
-
-});
-
-
 
 //MAP AND IMAGE FUNCTIONS
 //==========================================================
@@ -237,21 +236,21 @@ function initMap() {
     title: "Drag me!"
   });
 
-  //create player2's guess map
-  var map2 = new google.maps.Map(document.getElementById('map2'), {
-    zoom: 1,
-    center: myLatLng,
-    streetViewControl: false
-  });
+  // //create player2's guess map
+  // var map2 = new google.maps.Map(document.getElementById('map2'), {
+  //   zoom: 1,
+  //   center: myLatLng,
+  //   streetViewControl: false
+  // });
 
-  //Creating the marker and making it draggable for player to drag
-  //player2's draggable marker 
-  var marker2 = new google.maps.Marker({
-    position: myLatLng,
-    map: map2,
-    draggable: true,
-    title: "Drag me!"
-  });
+  // //Creating the marker and making it draggable for player to drag
+  // //player2's draggable marker 
+  // var marker2 = new google.maps.Marker({
+  //   position: myLatLng,
+  //   map: map2,
+  //   draggable: true,
+  //   title: "Drag me!"
+  // });
 
   //Use a listening event to retrieve the end value of where the marker is dragged to
   //player1's marker listener for user's drag event
@@ -266,9 +265,9 @@ function initMap() {
     $('#lat').val(guessedLat);
     $('#lng').val(guessedLng);
 
-    //store guessed coordinates for player1
-    playersRef.child("1/guessedLat").set(guessedLat);
-    playersRef.child("1/guessedLng").set(guessedLng);
+    // //store guessed coordinates for player1
+    // playersRef.child("1/guessedLat").set(guessedLat);
+    // playersRef.child("1/guessedLng").set(guessedLng);
 
 
     //Create new LatLng object for players location, pulling lat and lng from firebase
@@ -277,42 +276,42 @@ function initMap() {
     //Testing the distance calculation. We would change this to reference the specific location in an array of locations
     var diffDist = google.maps.geometry.spherical.computeDistanceBetween(cityLocation, guessedLocation);
 
-    //store difference distance for player1
-    playersRef.child("1/diffDistance").set(diffDist);
+    // //store difference distance for player1
+    // playersRef.child("1/diffDistance").set(diffDist);
 
     //closing drag end event listener
   });
 
 
-  //Use a listening event to retrieve the end value of where the marker is dragged to
-  //player2's marker listener for user's drag event
-  google.maps.event.addListener(marker2, 'dragend', function () {
-    var guessedLat = marker2.getPosition().lat();
-    var guessedLng = marker2.getPosition().lng();
+  // //Use a listening event to retrieve the end value of where the marker is dragged to
+  // //player2's marker listener for user's drag event
+  // google.maps.event.addListener(marker2, 'dragend', function () {
+  //   var guessedLat = marker2.getPosition().lat();
+  //   var guessedLng = marker2.getPosition().lng();
 
-    console.log(guessedLat);
-    console.log(guessedLng);
+  //   console.log(guessedLat);
+  //   console.log(guessedLng);
 
-    //Asssign the lat and lng values of the new marker location to #lat and #lng in the hidden form
-    $('#lat').val(guessedLat);
-    $('#lng').val(guessedLng);
+  //   //Asssign the lat and lng values of the new marker location to #lat and #lng in the hidden form
+  //   $('#lat').val(guessedLat);
+  //   $('#lng').val(guessedLng);
 
-    //store guessed coordinates for player1
-    playersRef.child("2/guessedLat").set(guessedLat);
-    playersRef.child("2/guessedLng").set(guessedLng);
+  //   //store guessed coordinates for player1
+  //   playersRef.child("2/guessedLat").set(guessedLat);
+  //   playersRef.child("2/guessedLng").set(guessedLng);
 
 
-    //Create new LatLng object for players location, pulling lat and lng from firebase
-    var guessedLocation = new google.maps.LatLng(player2.guessedLat, player2.guessedLng);
-    myLatLng=guessedLocation;
-    //Testing the distance calculation. We would change this to reference the specific location in an array of locations
-    var diffDist = google.maps.geometry.spherical.computeDistanceBetween(cityLocation, guessedLocation);
+  //   //Create new LatLng object for players location, pulling lat and lng from firebase
+  //   var guessedLocation = new google.maps.LatLng(player2.guessedLat, player2.guessedLng);
+  //   myLatLng=guessedLocation;
+  //   //Testing the distance calculation. We would change this to reference the specific location in an array of locations
+  //   var diffDist = google.maps.geometry.spherical.computeDistanceBetween(cityLocation, guessedLocation);
 
-    //store difference distance for player1
-    playersRef.child("2/diffDistance").set(diffDist);
+  //   //store difference distance for player1
+  //   playersRef.child("2/diffDistance").set(diffDist);
 
-    //closing drag end event listener
-  });
+  //   //closing drag end event listener
+  // });
 
   if(gameInitialized)
   {//Establishing search request to Google Maps Places Library
@@ -325,7 +324,8 @@ function initMap() {
     infoWindow = new google.maps.InfoWindow();
     service = new google.maps.places.PlacesService(map);
     //Function for running search and assigning what's returned to a callback function
-    service.nearbySearch(request, callback);
+    if (referenceArray.length < 1)
+    {service.nearbySearch(request, callback);}
     gameInitialized=false;
   }
 
