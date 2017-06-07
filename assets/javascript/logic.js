@@ -63,14 +63,18 @@ $("body").on("click","#submitAnswer", function(){
     storeGuessCoor_Diff("1");
     database.ref().child("/turn").set(2);
 
-  }else
+    $("#instructions").html("<h2>" + "It's Player's 2 turn!" + "</h2>");
+}
+  else
   {
     //still player1's turn but the value is submmitted from player2's window
    
   }
+  
 
   if(turn ===2 && player2.name === thisPlayer)
   {
+
      storeGuessCoor_Diff("2");
         //When both players diffDistance values are in, call result function
       endGame();
@@ -126,7 +130,7 @@ function enterGame() {
 
 
       database.ref("/players/1").onDisconnect().remove();
-      $("#instructions").html("<div class= 'jumbotron' id='plm'>" + "<h3>" + "Waiting on Player 2 to join!" + "</h3>" + "</div>");
+      $("#instructions").html("<h3>" + "Waiting on Player 2 to join!" + "</h3>");
 
     }//if there is no player one
     else if (player2 === null) {
@@ -272,7 +276,7 @@ database.ref().child("/result").on("value",function(snap){
       button.text("submit Answer");
       $("#gamePlay").append(guessMaps);
       $("#gamePlay").append(button);
-       $("#instructions").html("<div class='jumbotron' text-align = 'center'>" + "<h2>" + "<ol>" + "<li>" + "Player 1 goes first, drag your pin and drop it on where you think we are, the press submit!" + "</li>" + "<li>" + "Player 2, it's your turn after Player 1 presses submit, you must wait to press submit until Player 1 presses submit." + "</li>" + "</ol>" + "</div>");
+      $("#instructions").html("<h3>" + "It's Player's 1 turn!" + "</h3>");
       $("#plm").hide();
 
       //call google map api
@@ -515,7 +519,7 @@ function endGame() {
   }
   database.ref().child("/turn").set(1);    
   resultScreen()
-  $("#instructions").html("<div class= 'jumbotron'>" + "<h1>" + "Game Over" + "</h1>" + "</div>");
+  $("#instructions").html("<h1>" + "Game Over" + "</h1>");
 
 }
 
