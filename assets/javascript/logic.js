@@ -127,8 +127,8 @@ function enterGame() {
       database.ref().child("/targetCity").set(randomCity);
 
       database.ref("/players/1").onDisconnect().remove();
-      $("#name-form").html("<div class= 'jumbotron' id='plm'>" + "<h3>" + "Waiting on Player 2 to join!" + "</h3>" + "</div>");
-      $("#instructions").hide();
+      //$("#name-form").html("<div class= 'jumbotron' id='plm'>" + "<h3>" + "Waiting on Player 2 to join!" + "</h3>" + "</div>");
+      $("#instructions").html("<div class= 'jumbotron' id='plm'>" + "<h3>" + "Waiting on Player 2 to join!" + "</h3>" + "</div>");
 
     }//if there is no player one
     else if (player2 === null) {
@@ -271,7 +271,7 @@ database.ref().child("/result").on("value",function(snap){
       button.text("submit Answer");
       $("#gamePlay").append(guessMaps);
       $("#gamePlay").append(button);
-      $("#instructions").hide();
+      $("#instructions").html("<div class='jumbotron' text-align='center'>" + "<h2>" + "Instructions" + "</h2>" + "<ol>" + "<li>" + "Player 1 goes first, drag your pin on the map and drop it on the location where you think these pictures are!"  + "</li>" + "<li>" + "Then press submit!" + "</li>" + "<li>" + "Player 2 must make their submission after Player 1, follow the same steps above!" +"</li>" + "</ol>" + "</div>");
       $("#plm").hide();
 
       //call google map api
@@ -519,7 +519,7 @@ function endGame() {
 
 function resultScreen()
 {
-
+  $("#instructions").hide();
   database.ref().child("/result").set("<p>Result:</p><p>These photo are from: "+ randomCity.name+"</p><p>Players Scores:</p><p>"+player1.name+" win: "+player1.win+" loss: "+ player1.loss+"</p><p>"+ player2.name+" win: "+player2.win+" loss: "+player2.loss+"</p>");
 
 }
