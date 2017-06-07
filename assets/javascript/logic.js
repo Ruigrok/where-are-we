@@ -2,7 +2,7 @@
 
 // need to work on the submit button , once the submit clicks it will switch turns to (2) , if it was on (2) it will call the endgame function
 
-var config = {
+  var config = {
   apiKey: "AIzaSyB8PdcFQ8isaUyr33dV3cvGydDhMfI9mM0",
   authDomain: "where-are-we-84538.firebaseapp.com",
   databaseURL: "https://where-are-we-84538.firebaseio.com",
@@ -55,7 +55,7 @@ $("#name-input").keypress(function(e) {
   }
 });
 
-$("body").on("click","button", function(){
+$("body").on("click","#submitAnswer", function(){
 
 
   if(turn ===1 && player1.name === thisPlayer)
@@ -123,8 +123,7 @@ function enterGame() {
       //set the turn indicator to 1
       database.ref().child("/turn").set(1);
       // database.ref("/result").child("/round").set(0);
-      randomCity = cities[Math.floor(Math.random() * cities.length)];
-      database.ref().child("/targetCity").set(randomCity);
+
 
       database.ref("/players/1").onDisconnect().remove();
       $("#name-form").html("<div class= 'jumbotron' id='plm'>" + "<h3>" + "Waiting on Player 2 to join!" + "</h3>" + "</div>");
@@ -255,6 +254,8 @@ database.ref().child("/result").on("value",function(snap){
       // playernames.append(playername1);
       // playernames.append(playername2);  
       // $("#gamePlay").append(playernames);
+      randomCity = cities[Math.floor(Math.random() * cities.length)];
+      database.ref().child("/targetCity").set(randomCity);
 
       var guessMaps=$("<div>");
       guessMaps.addClass("row");
@@ -268,6 +269,7 @@ database.ref().child("/result").on("value",function(snap){
       //guessMaps.append(guessMap2);
       var button=$("<button>");
       button.attr("type","button");
+      button.attr("id","submitAnswer");
       button.text("submit Answer");
       $("#gamePlay").append(guessMaps);
       $("#gamePlay").append(button);
@@ -519,8 +521,32 @@ function endGame() {
 
 function resultScreen()
 {
+  //var button=$("<button>");
+   // button.text("Next Round");
+   // button.attr("id","nextRound");
+    
 
-  database.ref().child("/result").set("<p>Result:</p><p>These photo are from: "+ randomCity.name+"</p><p>Players Scores:</p><p>"+player1.name+" win: "+player1.win+" loss: "+ player1.loss+"</p><p>"+ player2.name+" win: "+player2.win+" loss: "+player2.loss+"</p>");
+  database.ref().child("/result").set("<p>Result:</p><p>These photo are from: "+ randomCity.name+"</p><p>Players Scores:</p><p>"+player1.name+" win: "+player1.win+" loss: "+ player1.loss+"</p><p>"+ player2.name+" win: "+player2.win+" loss: "+player2.loss+"</p>"+"<button id='nextRound'>Next Round</button>");
+    
+  // Restarting the game when we press on nextRound
+  $("body").on("click","#nextRound" , function(){
+    // keeping the game from refreshing
+    event.preventDefault();
+    // changing it to true , so the game witll intialize
+    gameInitialized=true;
+    // calling gameplay
+    gamePlay();  
+    //cleearing photorefrence so we can get another random city
+  database.ref("/photoReference").remove();
+  // setting the turn to player 1
+  database.ref().child("/turn").set(1);
+  // removing the targeted city so it will get another random city
+  database.ref().child("targetCity").remove();
+  //removing the result from the database , but keeping track of the counters
+  database.ref().child("result").remove();
+  resultScreen().empty();
+  });
+
 
 }
 
