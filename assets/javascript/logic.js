@@ -126,8 +126,7 @@ function enterGame() {
 
 
       database.ref("/players/1").onDisconnect().remove();
-      $("#name-form").html("<div class= 'jumbotron' id='plm'>" + "<h3>" + "Waiting on Player 2 to join!" + "</h3>" + "</div>");
-      $("#instructions").hide();
+      $("#instructions").html("<div class= 'jumbotron' id='plm'>" + "<h3>" + "Waiting on Player 2 to join!" + "</h3>" + "</div>");
 
     }//if there is no player one
     else if (player2 === null) {
@@ -187,7 +186,7 @@ playersRef.on("value", function (snapshot) {
   {
 
 
-    $("#timer").show();
+    $("#timerHeader").show();
     setInterval(function(){
       time--;
       $("#timer").text(time);
@@ -273,7 +272,7 @@ database.ref().child("/result").on("value",function(snap){
       button.text("submit Answer");
       $("#gamePlay").append(guessMaps);
       $("#gamePlay").append(button);
-      $("#instructions").hide();
+       $("#instructions").html("<div class='jumbotron' text-align = 'center'>" + "<h2>" + "<ol>" + "<li>" + "Player 1 goes first, drag your pin and drop it on where you think we are, the press submit!" + "</li>" + "<li>" + "Player 2, it's your turn after Player 1 presses submit, you must wait to press submit until Player 1 presses submit." + "</li>" + "</ol>" + "</div>");
       $("#plm").hide();
 
       //call google map api
@@ -516,6 +515,7 @@ function endGame() {
   }
   database.ref().child("/turn").set(1);    
   resultScreen()
+  $("#instructions").html("<div class= 'jumbotron'>" + "<h1>" + "Game Over" + "</h1>" + "</div>");
 
 }
 
