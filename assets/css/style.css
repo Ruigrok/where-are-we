@@ -28,17 +28,57 @@ body{
 {
 	border: solid black 4px;
 }
+#nextRound
+{
+	
+    float: right;
+    color: red;
+    margin-right: 524px;
+}
+
+#resultId
+{
+	text-align: center;
+}
+#correctCity
+{
+	text-align:center;
+
+}
+#scores
+{
+	text-align: center;
+}
 
 #name1
 {
 	text-align: center;
+    margin-right: 372px;
 }
+#win1
+{
+	text-align: center;
+    margin-right: 372px;
+}
+#loss1
+{
+	text-align: center;
+    margin-right: 372px;
+}
+
 #name2
 {
 	text-align: center;
+    margin-left: 372px;
+    margin-top: -149px;
 }
-
-#nextRound
+#win2
 {
-	color: red;
+	text-align: center;
+    margin-left: 372px;
+}
+#loss2
+{
+	text-align: center;
+    margin-left: 372px;
 }

@@ -519,18 +519,16 @@ function endGame() {
   }
   database.ref().child("/turn").set(1);    
   resultScreen()
-  $("#instructions").html("<h1>" + "Game Over" + "</h1>");
+  $("#instructions").html("<h2>" + "Game Over" + "</h2>");
 
 }
 
 function resultScreen()
 {
-  //var button=$("<button>");
-   // button.text("Next Round");
-   // button.attr("id","nextRound");
-    
+    // this was added in order to remove the instructions at the result screen , it's only removing it for player2 , still need to add the instruction in the database so we can remove it at the result screen for both screens
+    //$("#instructions").remove();
 
-  database.ref().child("/result").set("<p>Result:</p><p>These photo are from: "+ randomCity.name+"</p><p>Players Scores:</p><p>"+player1.name+" win: "+player1.win+" loss: "+ player1.loss+"</p><p>"+ player2.name+" win: "+player2.win+" loss: "+player2.loss+"</p>"+"<button id='nextRound'>Next Round</button>");
+  database.ref().child("/result").set("<h2 id='resultId'>Result</h2><h3 id='correctCity'>City: "+ randomCity.name+"</h3><h3 id='scores'>Scores</h3><h2 id='name1'>"+player1.name+"</h2><h2 id='win1'> win: "+player1.win+"</h2><h2 id='loss1'> loss: "+ player1.loss+"</h2><h2 id='name2'>"+ player2.name+"</h2><h2 id='win2'> win: "+player2.win+"</h2><h2 id='loss2'> loss: "+player2.loss+"</h2>"+"<button id='nextRound'>Next Round</button>");
     
   // Restarting the game when we press on nextRound
   $("body").on("click","#nextRound" , function(){
