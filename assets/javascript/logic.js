@@ -188,7 +188,7 @@ playersRef.on("value", function (snapshot) {
   {
 
 
-    $("#timer").show();
+    $("#timerHeader").show();
     setInterval(function(){
       time--;
       $("#timer").text(time);

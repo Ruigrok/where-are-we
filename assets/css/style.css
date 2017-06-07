@@ -3,9 +3,10 @@ body{
 	background-image: url("../images/background.png");
 }
 
-#timer{
-	margin:7px 0px 5px 0px;
-	/*display: none;*/
+#timerHeader{
+	margin:15px 30px 5px 0px;
+	color: #666;
+	display: none;
 }		
 
 .jumbotron{
