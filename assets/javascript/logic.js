@@ -297,6 +297,7 @@ database.ref().child("/result").on("value",function(snap){
 
   if(snap.exists())
   {
+    $("#name-form").hide();
     $("#gamePlay").html(snap.val());
   }
   else{
