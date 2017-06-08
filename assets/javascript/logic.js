@@ -300,7 +300,7 @@ database.ref().child("/turn").on("value",function(snap){
       
       else if(turn ===0)
       {
-        $("#instructions").html("<h2>" + winner + " wins! Are you ready to play another round?" + "</h2>");
+        $("#instructions").html("<h2>Here are the results. Are you ready to play another round?</h2>");
       }
       
 });
@@ -550,6 +550,7 @@ function displayPlacePhotos()
       
       var imgItem=$("<img>");
       imgItem.attr("src",referenceArray[i]);
+      imgItem.attr("style", "margin: 0 auto");
      
       if(i===0)
       {
