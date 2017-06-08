@@ -2,6 +2,10 @@ body{
 	box-sizing: border-box;
 	background-image: url("../images/background.png");
 }
+input{
+	width:75%;
+	text-align: center;
+}
 
 #timerHeader{
 	margin:15px 30px 5px 0px;
@@ -14,26 +18,13 @@ body{
 }
 
 #map, #map2 {
-    width: 50%;
+    width: 75%;
     height: 400px;
     background-color: grey;
 }
 
-#map
-{
-	border: solid black 4px;
-}
-
-#map2
-{
-	border: solid black 4px;
-}
-#nextRound
-{
-	
-    float: right;
-    color: red;
-    margin-right: 524px;
+#photoCarousel{
+	margin-bottom: 3%;
 }
 
 #resultId

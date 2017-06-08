@@ -24,12 +24,10 @@ var turn=0;
 var gameInitialized=true;
 var playerName = "";
 var thisPlayer;
-var roundEnd=true;
+var next=false;
 
 //Array of city objects. When we actually fill out all the city info we can move the array to another JS file to reduce clutter
-
-
-var randomCity;
+var randomCity=null;
 
 //these are variables for setting up guess map and getting target destination photos
 var map;
@@ -64,7 +62,7 @@ $("body").on("click","#submitAnswer", function(){
     database.ref().child("/turn").set(2);
 
     $("#instructions").html("<h2>" + "It's Player's 2 turn!" + "</h2>");
-}
+  }
   else
   {
     //still player1's turn but the value is submmitted from player2's window
@@ -85,6 +83,32 @@ $("body").on("click","#submitAnswer", function(){
   }
 
 });
+  // Restarting the game when we press on nextRound
+$("body").on("click","#nextRound", function(){
+    // keeping the game from refreshing
+    //event.preventDefault();
+
+    if(player1.name=== thisPlayer)
+    {
+      $("#instructions").html("Waiting for Player 2 to be ready for the next round");
+
+    }
+    else
+    {
+        database.ref("/photoReference").remove();
+        database.ref().child("targetCity").remove();
+        database.ref().child("result").remove();
+
+        randomCity = cities[Math.floor(Math.random() * cities.length)];
+        database.ref().child("/targetCity").set(randomCity);
+        database.ref().child("/nextRound").set(true);
+    }
+
+
+
+});
+
+
 
 function storeGuessCoor_Diff(childPath)
 {
@@ -107,7 +131,7 @@ function storeGuessCoor_Diff(childPath)
 function enterGame() {
 
   //check if both player exists
-  if (!(player1 && player2)) {
+  //if (!player1 || !player2) {
     //if there is no player one
     if (player1 === null) {
       //initialize player1 object
@@ -120,7 +144,7 @@ function enterGame() {
         guessedLng: 0,
         diffDistance: 0
       };
-      playersRef.child(1).set(player1);
+      
       // chatkey=chatRef.push().key;
       // chatRef.child(chatkey).set({name:playerName});
       thisPlayer = playerName; //store the player to the player's screen
@@ -128,9 +152,13 @@ function enterGame() {
       database.ref().child("/turn").set(1);
       // database.ref("/result").child("/round").set(0);
 
-
-      database.ref("/players/1").onDisconnect().remove();
+      
       $("#instructions").html("<h3>" + "Waiting on Player 2 to join!" + "</h3>");
+
+      randomCity = cities[Math.floor(Math.random() * cities.length)];
+      database.ref().child("/targetCity").set(randomCity);
+      playersRef.child(1).set(player1);
+      database.ref("/players/1").onDisconnect().remove();
 
     }//if there is no player one
     else if (player2 === null) {
@@ -151,7 +179,8 @@ function enterGame() {
       thisPlayer = playerName;
       database.ref("/players/2").onDisconnect().remove();
     }
-  }
+  //}
+
 };
 
 database.ref("/photoReference").on("value", function(snap){
@@ -190,14 +219,14 @@ playersRef.on("value", function (snapshot) {
   {
 
 
-    $("#timerHeader").show();
-    setInterval(function(){
-      time--;
-      $("#timer").text(time);
-      if(time === 0){
-        //need function here to hide game screen and show results screen
-      }
-    }, 1000);
+    // $("#timerHeader").show();
+    // setInterval(function(){
+    //   time--;
+    //   $("#timer").text(time);
+    //   if(time === 0){
+    //     //need function here to hide game screen and show results screen
+    //   }
+    // }, 1000);
 
     //create game play screen
     gamePlay();
@@ -212,13 +241,14 @@ playersRef.on("value", function (snapshot) {
 playersRef.on("child_removed", function (snapshot) {
   $("#gamePlay").empty();
   gameInitialized=true;
-  roundEnd=true;
+  next=false;
   database.ref("/photoReference").remove();
   referenceArray=[];
   turn=0;
   database.ref().child("/turn").remove();
   database.ref().child("targetCity").remove();
   database.ref().child("result").remove();
+  database.ref().child("/nextRound").remove();
 
 });
 
@@ -237,10 +267,32 @@ database.ref().child("/result").on("value",function(snap){
   {
     $("#gamePlay").html(snap.val());
   }
+  else{
+
+    $("#gamePlay").empty();
+    
+  }
 
 });
 
-  function gamePlay()
+database.ref().child("/nextRound").on("value", function(snap){
+
+  if(snap.exists())
+  {
+    if(snap.val())
+    {
+     
+      $("#gamePlay").empty();
+
+        database.ref().child("/turn").set(1);
+        gameInitialized=true;
+        gamePlay();
+    }
+  }
+
+});
+
+function gamePlay()
   {
     if(gameInitialized)
     {//define the structure to store players' guess map
@@ -257,27 +309,33 @@ database.ref().child("/result").on("value",function(snap){
       // playernames.append(playername1);
       // playernames.append(playername2);  
       // $("#gamePlay").append(playernames);
-      randomCity = cities[Math.floor(Math.random() * cities.length)];
-      database.ref().child("/targetCity").set(randomCity);
+      database.ref().child("/nextRound").set(false);
 
       var guessMaps=$("<div>");
       guessMaps.addClass("row");
       var guessMap1=$("<div>");
-      guessMap1.addClass("col-md-12")
+      guessMap1.addClass("col-md-7")
       //var guessMap2=$("<div>");
       ///guessMap2.addClass("col-md-6");
       guessMap1.attr("id","map");
       //guessMap2.attr("id","map2");
       guessMaps.append(guessMap1);
       //guessMaps.append(guessMap2);
+
+      var buttonCol=$("<div>");
+      buttonCol.addClass("col-md-3")
       var button=$("<button>");
       button.attr("type","button");
       button.attr("id","submitAnswer");
-      button.text("submit Answer");
+      button.addClass("btn btn-default btn-lg btn-block");
+      button.text("Submit Your Answer");
+      buttonCol.append(button);
+      guessMaps.append(buttonCol);
+
       $("#gamePlay").append(guessMaps);
-      $("#gamePlay").append(button);
+     
       $("#instructions").html("<h3>" + "It's Player's 1 turn!" + "</h3>");
-      $("#plm").hide();
+      //$("#plm").hide();
 
       //call google map api
       initMap();
@@ -345,37 +403,6 @@ function initMap() {
     //closing drag end event listener
   });
 
-
-  // //Use a listening event to retrieve the end value of where the marker is dragged to
-  // //player2's marker listener for user's drag event
-  // google.maps.event.addListener(marker2, 'dragend', function () {
-  //   var guessedLat = marker2.getPosition().lat();
-  //   var guessedLng = marker2.getPosition().lng();
-
-  //   console.log(guessedLat);
-  //   console.log(guessedLng);
-
-  //   //Asssign the lat and lng values of the new marker location to #lat and #lng in the hidden form
-  //   $('#lat').val(guessedLat);
-  //   $('#lng').val(guessedLng);
-
-  //   //store guessed coordinates for player1
-  //   playersRef.child("2/guessedLat").set(guessedLat);
-  //   playersRef.child("2/guessedLng").set(guessedLng);
-
-
-  //   //Create new LatLng object for players location, pulling lat and lng from firebase
-  //   var guessedLocation = new google.maps.LatLng(player2.guessedLat, player2.guessedLng);
-  //   myLatLng=guessedLocation;
-  //   //Testing the distance calculation. We would change this to reference the specific location in an array of locations
-  //   var diffDist = google.maps.geometry.spherical.computeDistanceBetween(cityLocation, guessedLocation);
-
-  //   //store difference distance for player1
-  //   playersRef.child("2/diffDistance").set(diffDist);
-
-  //   //closing drag end event listener
-  // });
-
   if(gameInitialized)
   {//Establishing search request to Google Maps Places Library
     var request = {
@@ -406,7 +433,7 @@ function callback(results, status) {
   {//retreive photos that represent the target destination
     for (var i = 0, result; result = results[i]; i++) {
       if (typeof result.photos !== 'undefined') {
-        var cityPhoto = result.photos[0].getUrl({ 'maxWidth': 1140});
+        var cityPhoto = result.photos[0].getUrl({ 'maxWidth': 1140, 'maxHeight': 855});
         referenceArray.push(cityPhoto);
       }
     }
@@ -504,7 +531,6 @@ function endGame() {
     playersRef.child("/2/loss").set(player2.loss);
     player1.win++;
     playersRef.child("/1/win").set(player1.win);
-  
 
   }
   else  // incase of a tie
@@ -516,40 +542,23 @@ function endGame() {
     player1.tie++;
     playersRef.child("/1/tie").set(player1.tie);
 
-  }
-  database.ref().child("/turn").set(1);    
-  resultScreen()
+  }   
+  resultScreen();
   $("#instructions").html("<h2>" + "Game Over" + "</h2>");
 
-}
+};
 
 function resultScreen()
 {
     // this was added in order to remove the instructions at the result screen , it's only removing it for player2 , still need to add the instruction in the database so we can remove it at the result screen for both screens
     //$("#instructions").remove();
 
-  database.ref().child("/result").set("<h2 id='resultId'>Result</h2><h3 id='correctCity'>City: "+ randomCity.name+"</h3><h3 id='scores'>Scores</h3><h2 id='name1'>"+player1.name+"</h2><h2 id='win1'> win: "+player1.win+"</h2><h2 id='loss1'> loss: "+ player1.loss+"</h2><h2 id='name2'>"+ player2.name+"</h2><h2 id='win2'> win: "+player2.win+"</h2><h2 id='loss2'> loss: "+player2.loss+"</h2>"+"<button id='nextRound'>Next Round</button>");
+    database.ref().child("/result").set("<h2 id='resultId'>Result</h2><h3 id='correctCity'>City: "+ randomCity.name+"</h3><h3 id='scores'>Scores</h3><h2 id='name1'>"+player1.name+"</h2><h2 id='win1'> win: "+player1.win+"</h2><h2 id='loss1'> loss: "+ player1.loss+"</h2><h2 id='name2'>"+ player2.name+"</h2><h2 id='win2'> win: "+player2.win+"</h2><h2 id='loss2'> loss: "+player2.loss+"</h2>"+"<div class='row'><div class='col-md-6 col-md-offset-3'><button id='nextRound' class='btn btn-default btn-lg btn-block'>Next Round</button></div></div>");
+
     
-  // Restarting the game when we press on nextRound
-  $("body").on("click","#nextRound" , function(){
-    // keeping the game from refreshing
-    event.preventDefault();
-    // changing it to true , so the game witll intialize
-    gameInitialized=true;
-    // calling gameplay
-    gamePlay();  
-    //cleearing photorefrence so we can get another random city
-  database.ref("/photoReference").remove();
-  // setting the turn to player 1
-  database.ref().child("/turn").set(1);
-  // removing the targeted city so it will get another random city
-  database.ref().child("targetCity").remove();
-  //removing the result from the database , but keeping track of the counters
-  database.ref().child("result").remove();
-  resultScreen().empty();
-  });
+
+};
 
 
-}
 
 
