@@ -63,13 +63,15 @@ $("body").on("click","#submitAnswer", function(){
     storeGuessCoor_Diff("1");
     database.ref().child("/turn").set(2);
 
-    $("#instructions").html("<h2>" + "It's Player's 2 turn!" + "</h2>");
+    $("#instructions").html("<h3>" + "It's Player 2 turn!" + "</h3>");
 }
   else
   {
+    
+}
     //still player1's turn but the value is submmitted from player2's window
    
-  }
+  $("#instructions").html("<h3>" + "It's Player 2 turn!" + "</h3>");
   
 
   if(turn ===2 && player2.name === thisPlayer)
@@ -118,7 +120,8 @@ function enterGame() {
         tie: 0,
         guessedLat: 0,
         guessedLng: 0,
-        diffDistance: 0
+        diffDistance: 0,
+        playerNum: 1
       };
       playersRef.child(1).set(player1);
       // chatkey=chatRef.push().key;
@@ -142,7 +145,8 @@ function enterGame() {
         tie: 0,
         guessedLat: 0,
         guessedLng: 0,
-        diffDistance: 0
+        diffDistance: 0,
+        playerNum: 2
       };
       playersRef.child(2).set(player2);
       // database.ref("/result").child("/round").set(0);
