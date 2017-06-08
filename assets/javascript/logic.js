@@ -63,6 +63,7 @@ $("body").on("click","#submitAnswer", function(){
 
     $("#instructions").html("<h2>"+player1.name +", <br> It's "+player2.name+"'s turn!" + "</h2>");
     $("body").scrollTop(0);
+    $("#submitAnswer").remove();
   }
   else
   {
@@ -282,6 +283,18 @@ database.ref().child("/turn").on("value",function(snap){
       }else if(player2.name === thisPlayer && turn ===2)    
       {
         $("#instructions").html("<h2>" + player2.name +", <br> It's your turn!" + "</h2>");
+
+        var buttonCol=$("<div>");
+        buttonCol.addClass("col-md-3")
+        var button=$("<button>");
+        button.attr("type","button");
+        button.attr("id","submitAnswer");
+        button.addClass("btn btn-default btn-lg btn-block");
+        button.text("Submit Your Answer");
+        buttonCol.append(button);
+
+        $("#mapDiv").append(buttonCol);
+
       }else if(turn ===0)
       {
         $("#instructions").html("<h2>" + "Here are the results. Are you ready to play another round?" + "</h2>");
@@ -357,6 +370,7 @@ function gamePlay()
 
       var guessMaps=$("<div>");
       guessMaps.addClass("row");
+      guessMaps.attr("id", "mapDiv");
       var guessMap1=$("<div>");
       guessMap1.addClass("col-md-7")
       //var guessMap2=$("<div>");
@@ -366,21 +380,21 @@ function gamePlay()
       guessMaps.append(guessMap1);
       //guessMaps.append(guessMap2);
 
-      var buttonCol=$("<div>");
-      buttonCol.addClass("col-md-3")
-      var button=$("<button>");
-      button.attr("type","button");
-      button.attr("id","submitAnswer");
-      button.addClass("btn btn-default btn-lg btn-block");
-      button.text("Submit Your Answer");
-      buttonCol.append(button);
-      guessMaps.append(buttonCol);
-
       $("#gamePlay").append(guessMaps);
      
       if(player1.name === thisPlayer && turn ===1)
       {
         $("#instructions").html("<h2>" + player1.name +", <br> It's your turn!" + "</h2>");
+
+        var buttonCol=$("<div>");
+        buttonCol.addClass("col-md-3")
+        var button=$("<button>");
+        button.attr("type","button");
+        button.attr("id","submitAnswer");
+        button.addClass("btn btn-default btn-lg btn-block");
+        button.text("Submit Your Answer");
+        buttonCol.append(button);
+        guessMaps.append(buttonCol);
       }
       else if(player2.name === thisPlayer && turn ===1)
       {
