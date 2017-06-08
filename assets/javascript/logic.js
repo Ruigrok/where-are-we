@@ -61,7 +61,7 @@ $("body").on("click","#submitAnswer", function(){
     storeGuessCoor_Diff("1");
     database.ref().child("/turn").set(2);
 
-    $("#instructions").html("<h2>" + "It's Player's 2 turn!" + "</h2>");
+    $("#instructions").html("<h2>"+player1.name +", <br> It's "+player2.name+"'s turn!" + "</h2>");
   }
   else
   {
@@ -90,7 +90,7 @@ $("body").on("click","#nextRound", function(){
 
     if(player1.name=== thisPlayer)
     {
-      $("#instructions").html("Waiting for Player 2 to be ready for the next round");
+      $("#instructions").html("<h2>Waiting for "+player2.name+" to be ready for the next round</h2>");
 
     }
     else
@@ -99,8 +99,7 @@ $("body").on("click","#nextRound", function(){
         database.ref().child("targetCity").remove();
         database.ref().child("result").remove();
 
-        randomCity = cities[Math.floor(Math.random() * cities.length)];
-        database.ref().child("/targetCity").set(randomCity);
+        getNewCity();
         database.ref().child("/nextRound").set(true);
     }
 
@@ -108,7 +107,11 @@ $("body").on("click","#nextRound", function(){
 
 });
 
-
+function getNewCity()
+{
+      randomCity = cities[Math.floor(Math.random() * cities.length)];
+      database.ref().child("/targetCity").set(randomCity);
+}
 
 function storeGuessCoor_Diff(childPath)
 {
@@ -151,12 +154,9 @@ function enterGame() {
       //set the turn indicator to 1
       database.ref().child("/turn").set(1);
       // database.ref("/result").child("/round").set(0);
-
+      getNewCity();
       
-      $("#instructions").html("<h3>" + "Waiting on Player 2 to join!" + "</h3>");
-
-      randomCity = cities[Math.floor(Math.random() * cities.length)];
-      database.ref().child("/targetCity").set(randomCity);
+      $("#instructions").html("<h2>" + "Hi "+playerName+ "! <br>Waiting on another player to join!" + "</h2>");
       playersRef.child(1).set(player1);
       database.ref("/players/1").onDisconnect().remove();
 
@@ -172,11 +172,12 @@ function enterGame() {
         guessedLng: 0,
         diffDistance: 0
       };
+      thisPlayer = playerName;
       playersRef.child(2).set(player2);
       // database.ref("/result").child("/round").set(0);
       // chatkey=chatRef.push().key;
       // chatRef.child(chatkey).set({name:playerName});
-      thisPlayer = playerName;
+      
       database.ref("/players/2").onDisconnect().remove();
     }
   //}
@@ -250,10 +251,26 @@ playersRef.on("child_removed", function (snapshot) {
   database.ref().child("result").remove();
   database.ref().child("/nextRound").remove();
 
+  if (snapshot.val().name !==thisPlayer && thisPlayer)
+  {
+    $("#instructions").html("<h2>"+snapshot.val().name+" has left the game. Waiting for another player to join!</h2>");
+    getNewCity();
+  }
+
 });
 
 database.ref().child("/turn").on("value",function(snap){
   turn=snap.val();
+      if(player1.name === thisPlayer && turn ===2)
+      {
+        $("#instructions").html("<h2>Hi " + player1.name +", <br> It's "+player2.name+"'s turn!" + "</h2>");
+      }else if(player2.name === thisPlayer && turn ===2)    
+      {
+        $("#instructions").html("<h2>" + player2.name +", <br> It's your turn!" + "</h2>");
+      }else if(turn ===0)
+      {
+        $("#instructions").html("<h2>" + "Here are the results. Are you ready to play another round?" + "</h2>");
+      }
 
 });
 
@@ -334,13 +351,22 @@ function gamePlay()
 
       $("#gamePlay").append(guessMaps);
      
-      $("#instructions").html("<h3>" + "It's Player's 1 turn!" + "</h3>");
-      //$("#plm").hide();
+      if(player1.name === thisPlayer && turn ===1)
+      {
+        $("#instructions").html("<h2>" + player1.name +", <br> It's your turn!" + "</h2>");
+      }
+      else if(player2.name === thisPlayer && turn ===1)
+      {
+        $("#instructions").html("<h2>" + "Hi "+player2.name+",<br>It's "+player1.name+"'s turn!" + "</h2>");
+      }
+      
 
       //call google map api
       initMap();
     }
 
+
+ 
   }
 
 //MAP AND IMAGE FUNCTIONS
@@ -544,7 +570,7 @@ function endGame() {
 
   }   
   resultScreen();
-  $("#instructions").html("<h2>" + "Game Over" + "</h2>");
+  database.ref().child("/turn").set(0);
 
 };
 
@@ -553,7 +579,7 @@ function resultScreen()
     // this was added in order to remove the instructions at the result screen , it's only removing it for player2 , still need to add the instruction in the database so we can remove it at the result screen for both screens
     //$("#instructions").remove();
 
-    database.ref().child("/result").set("<h2 id='resultId'>Result</h2><h3 id='correctCity'>City: "+ randomCity.name+"</h3><h3 id='scores'>Scores</h3><h2 id='name1'>"+player1.name+"</h2><h2 id='win1'> win: "+player1.win+"</h2><h2 id='loss1'> loss: "+ player1.loss+"</h2><h2 id='name2'>"+ player2.name+"</h2><h2 id='win2'> win: "+player2.win+"</h2><h2 id='loss2'> loss: "+player2.loss+"</h2>"+"<div class='row'><div class='col-md-6 col-md-offset-3'><button id='nextRound' class='btn btn-default btn-lg btn-block'>Next Round</button></div></div>");
+    database.ref().child("/result").set("<h2 id='resultId'>Result</h2><h3 id='correctCity'>Th city in the photo is <strong>"+ randomCity.name+"</strong></h3><h3 id='scores'>Scores</h3><h2 id='name1'>"+player1.name+"</h2><h2 id='win1'> win: "+player1.win+"</h2><h2 id='loss1'> loss: "+ player1.loss+"</h2><h2 id='name2'>"+ player2.name+"</h2><h2 id='win2'> win: "+player2.win+"</h2><h2 id='loss2'> loss: "+player2.loss+"</h2>"+"<div class='row'><div class='col-md-3 col-md-offset-3'><h3>"+player1.name+" is off by "+Math.round(player1.diffDistance)+" meters</h3></div><div class='col-md-3 col-md-offset-1'><h3>"+player2.name+" is off by "+Math.round(player2.diffDistance) +"meters</h3></div></div>"+"<div class='row'><div class='col-md-6 col-md-offset-3'><button id='nextRound' class='btn btn-default btn-lg btn-block'>Next Round</button></div></div>");
 
     
 

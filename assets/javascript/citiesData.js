@@ -128,11 +128,6 @@ var cities = [
         lng: 12.5683,
     },
     {
-        name: "Oslo",
-        lat: 12.5683,
-        lng: 10.7522,
-    },
-    {
         name: "Athens",
         lat: 37.9838,
         lng: 23.7275,
