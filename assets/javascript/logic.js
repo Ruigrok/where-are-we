@@ -24,7 +24,7 @@ var turn=0;
 var gameInitialized=true;
 var playerName = "";
 var thisPlayer;
-var next=false;
+var player1Ready,player2Ready;
 
 //Array of city objects. When we actually fill out all the city info we can move the array to another JS file to reduce clutter
 var randomCity=null;
@@ -62,6 +62,7 @@ $("body").on("click","#submitAnswer", function(){
     database.ref().child("/turn").set(2);
 
     $("#instructions").html("<h2>"+player1.name +", <br> It's "+player2.name+"'s turn!" + "</h2>");
+    $("body").scrollTop(0);
   }
   else
   {
@@ -88,24 +89,36 @@ $("body").on("click","#nextRound", function(){
     // keeping the game from refreshing
     //event.preventDefault();
 
-    if(player1.name=== thisPlayer)
+    if(player1.name=== thisPlayer && !player2Ready)
     {
-      $("#instructions").html("<h2>Waiting for "+player2.name+" to be ready for the next round</h2>");
-
-    }
-    else
+      $("#instructions").html("<h2>Waiting for "+player2.name+" to be ready for the next round.<i class=\"fa fa-spinner fa-pulse fa-2x fa-fw\"></i></h2>");
+      database.ref().child("/nextRound/player1").set(true);
+    }else if(player1.name === thisPlayer && player2Ready)
     {
-        database.ref("/photoReference").remove();
-        database.ref().child("targetCity").remove();
-        database.ref().child("result").remove();
-
-        getNewCity();
-        database.ref().child("/nextRound").set(true);
+            setupForNextRound();
+            database.ref().child("/nextRound/player1").set(true);
+    }else if(player2.name === thisPlayer && !player1Ready)
+    {
+        $("#instructions").html("<h2>Waiting for "+player1.name+" to be ready for the next round.<i class=\"fa fa-spinner fa-pulse fa-2x fa-fw\"></i></h2>");
+        database.ref().child("/nextRound/player2").set(true);
+    }else if(player2.name === thisPlayer && player1Ready)
+    {
+            setupForNextRound();
+            database.ref().child("/nextRound/player2").set(true);
     }
 
 
 
 });
+
+function setupForNextRound()
+{
+    database.ref("/photoReference").remove();
+    database.ref().child("targetCity").remove();
+    database.ref().child("result").remove();
+
+    getNewCity();
+}
 
 function getNewCity()
 {
@@ -156,7 +169,8 @@ function enterGame() {
       // database.ref("/result").child("/round").set(0);
       getNewCity();
       
-      $("#instructions").html("<h2>" + "Hi "+playerName+ "! <br>Waiting on another player to join!" + "</h2>");
+      $("#instructions").html("<h2>" + "Hi "+playerName+ "! <br>Waiting on another player to join! <i class=\"fa fa-spinner fa-pulse fa-2x fa-fw\"></i></h2>");
+      $("#name-form").hide();
       playersRef.child(1).set(player1);
       database.ref("/players/1").onDisconnect().remove();
 
@@ -172,6 +186,7 @@ function enterGame() {
         guessedLng: 0,
         diffDistance: 0
       };
+      $("#name-form").hide();
       thisPlayer = playerName;
       playersRef.child(2).set(player2);
       // database.ref("/result").child("/round").set(0);
@@ -242,7 +257,7 @@ playersRef.on("value", function (snapshot) {
 playersRef.on("child_removed", function (snapshot) {
   $("#gamePlay").empty();
   gameInitialized=true;
-  next=false;
+  
   database.ref("/photoReference").remove();
   referenceArray=[];
   turn=0;
@@ -253,7 +268,7 @@ playersRef.on("child_removed", function (snapshot) {
 
   if (snapshot.val().name !==thisPlayer && thisPlayer)
   {
-    $("#instructions").html("<h2>"+snapshot.val().name+" has left the game. Waiting for another player to join!</h2>");
+    $("#instructions").html("<h2>"+snapshot.val().name+" has left the game. Waiting for another player to join! <i class=\"fa fa-spinner fa-pulse fa-2x fa-fw\"></i></h2>");
     getNewCity();
   }
 
@@ -293,10 +308,23 @@ database.ref().child("/result").on("value",function(snap){
 });
 
 database.ref().child("/nextRound").on("value", function(snap){
-
-  if(snap.exists())
+  if(snap.child("player1").exists())
   {
-    if(snap.val())
+    player1Ready=snap.child("player1").val();
+  }else
+  {
+    player1Ready=false;
+  }
+
+
+  if(snap.child("player2").exists())
+  {
+    player2Ready=snap.child("player2").val();
+  }else{
+    player2Ready=false;
+  }
+
+  if(player1Ready && player2Ready)
     {
      
       $("#gamePlay").empty();
@@ -305,7 +333,6 @@ database.ref().child("/nextRound").on("value", function(snap){
         gameInitialized=true;
         gamePlay();
     }
-  }
 
 });
 
@@ -326,7 +353,7 @@ function gamePlay()
       // playernames.append(playername1);
       // playernames.append(playername2);  
       // $("#gamePlay").append(playernames);
-      database.ref().child("/nextRound").set(false);
+      database.ref().child("/nextRound").remove();
 
       var guessMaps=$("<div>");
       guessMaps.addClass("row");
@@ -579,7 +606,7 @@ function resultScreen()
     // this was added in order to remove the instructions at the result screen , it's only removing it for player2 , still need to add the instruction in the database so we can remove it at the result screen for both screens
     //$("#instructions").remove();
 
-    database.ref().child("/result").set("<h2 id='resultId'>Result</h2><h3 id='correctCity'>Th city in the photo is <strong>"+ randomCity.name+"</strong></h3><h3 id='scores'>Scores</h3><h2 id='name1'>"+player1.name+"</h2><h2 id='win1'> win: "+player1.win+"</h2><h2 id='loss1'> loss: "+ player1.loss+"</h2><h2 id='name2'>"+ player2.name+"</h2><h2 id='win2'> win: "+player2.win+"</h2><h2 id='loss2'> loss: "+player2.loss+"</h2>"+"<div class='row'><div class='col-md-3 col-md-offset-3'><h3>"+player1.name+" is off by "+Math.round(player1.diffDistance)+" meters</h3></div><div class='col-md-3 col-md-offset-1'><h3>"+player2.name+" is off by "+Math.round(player2.diffDistance) +"meters</h3></div></div>"+"<div class='row'><div class='col-md-6 col-md-offset-3'><button id='nextRound' class='btn btn-default btn-lg btn-block'>Next Round</button></div></div>");
+    database.ref().child("/result").set("<h2 id='resultId'>Result</h2><h3 id='correctCity'>Th city in the photo is <strong>"+ randomCity.name+"</strong></h3><h3 id='scores'>Scores</h3><h2 id='name1'>"+player1.name+"</h2><h2 id='win1'> win: "+player1.win+"</h2><h2 id='loss1'> loss: "+ player1.loss+"</h2><h2 id='name2'>"+ player2.name+"</h2><h2 id='win2'> win: "+player2.win+"</h2><h2 id='loss2'> loss: "+player2.loss+"</h2>"+"<div class='row'><div class='col-md-3 col-md-offset-3'><h3>"+player1.name+" is off by "+Math.round(player1.diffDistance)+" meters</h3></div><div class='col-md-3 col-md-offset-1'><h3>"+player2.name+" is off by "+Math.round(player2.diffDistance) +"meters</h3></div></div>"+"<div class='row'><div class='col-md-6 col-md-offset-3'><button id='nextRound' class='btn btn-default btn-lg btn-block'><i class='fa fa-globe fa-lg' aria-hidden='true'></i>Next Round</button></div></div>");
 
     
 
