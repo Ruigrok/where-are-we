@@ -57,9 +57,14 @@ var cities = [
         lng: 2.1734,
     },
     {
+        name: "Oslo",
+        lat: 59.9139,
+        lng: 10.7522,
+    },
+    {
         name: "Madrid",
         lat: 40.4168,
-        lng: 3.7038,
+        lng: -3.7038,
     },
     {
         name: "Munich",
