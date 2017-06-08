@@ -190,7 +190,9 @@ function enterGame() {
       };
       $("#name-form").hide();
       thisPlayer = playerName;
+      database.ref().child("/turn").set(1);
       playersRef.child(2).set(player2);
+
       // database.ref("/result").child("/round").set(0);
       // chatkey=chatRef.push().key;
       // chatRef.child(chatkey).set({name:playerName});
@@ -300,7 +302,7 @@ database.ref().child("/turn").on("value",function(snap){
       
       else if(turn ===0)
       {
-        $("#instructions").html("<h2>Here are the results. Are you ready to play another round?</h2>");
+        $("#instructions").html("<h2>"+winner+" wins! Are you ready to play another round?</h2>");
       }
       
 });
@@ -589,7 +591,7 @@ function endGame() {
 
   if (player1.diffDistance > player2.diffDistance) // player2 wins then
   {
-    winner = player2.name
+    winner = player2.name;
     player1.loss++;
     playersRef.child("/1/loss").set(player1.loss);
     player2.win++;
@@ -598,7 +600,7 @@ function endGame() {
   }
   else if (player1.diffDistance < player2.diffDistance) //if player1 wins then 
   {
-    winner = player1.name
+    winner = player1.name;
     player2.loss++;
     playersRef.child("/2/loss").set(player2.loss);
     player1.win++;
@@ -619,6 +621,14 @@ function endGame() {
   database.ref().child("/turn").set(0);
 
 };
+
+playersRef.child("/1/win").on("value",function(snap){
+  winner = player1.name;
+});
+
+playersRef.child("/2/win").on("value",function(snap){
+  winner = player2.name;
+});
 
 function resultScreen()
 {
