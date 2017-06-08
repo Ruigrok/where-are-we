@@ -26,6 +26,9 @@ input{
 #photoCarousel{
 	margin-bottom: 3%;
 }
+caption, .panel-title{
+	text-align: center
+}
 
 #resultId
 {

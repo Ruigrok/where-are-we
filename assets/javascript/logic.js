@@ -635,23 +635,19 @@ function resultScreen()
     // this was added in order to remove the instructions at the result screen , it's only removing it for player2 , still need to add the instruction in the database so we can remove it at the result screen for both screens
     //$("#instructions").remove();
 
-    database.ref().child("/result").set("<h2 id='resultId'>Result</h2><h3 id='correctCity'>The city in the photo is <strong>"
-    + randomCity.name+"</strong></h3><br><h3 id='scores'>Scores</h3><h2 id='name1'>"
-    + player1.name+"</h2><h2 id='win1'> win: "
-    + player1.win+"</h2><h2 id='loss1'> loss: "
-    + player1.loss+"</h2><h2 id='name2'>"
-    + player2.name+"</h2><h2 id='win2'> win: "
-    + player2.win+"</h2><h2 id='loss2'> loss: "
-    + player2.loss+"</h2>"+"<div class='row'><div class='col-md-3 col-md-offset-3'><h3>"
-    + player1.name+" was off by "
-    + Math.round(player1.diffDistance/1000)
-    + " km</h3></div><div class='col-md-3 col-md-offset-1'><h3>"
-    + player2.name+" was off by "
-    + Math.round(player2.diffDistance/1000)
-    + " km</h3></div></div>"
+  database.ref().child("/result").set("<div class='row'><div class='col-md-8 col-md-offset-2'><div class='panel panel-default'><div class='panel-heading'><h3 class='panel-title'>Results</h3></div><div class='panel-body' id='resultDisplay'><table class='table table-condensed'><caption><h2>The city in the photo is <strong>"
+    + randomCity.name+"</strong></h2></caption><thead><tr><th><i class='fa fa-tachometer fa-2x' aria-hidden='true'></i></th><th>"
+    + player1.name+"</th><th>"
+    + player2.name+"</th></tr></thead><tbody><tr><td>Win</td><td>"
+    + player1.win +"</td><td>"
+    + player2.win +"</td></tr><tr><td>Loss</td><td>"
+    + player1.loss +"</td><td>"
+    + player2.loss +"</td></tr><tr><td>Off by Distance</td><td>"
+    + Math.round(player1.diffDistance/1000)+"km </td><td>"
+    + Math.round(player2.diffDistance/1000)+"km </td></tr></tbody></table></div></div></div></div>"
     + "<div class='row'><div class='col-md-6 col-md-offset-3'><button id='nextRound' class='btn btn-default btn-lg btn-block'><i class='fa fa-globe fa-lg' aria-hidden='true'></i>Next Round</button></div></div>");
 
-    
+
 
 };
 
