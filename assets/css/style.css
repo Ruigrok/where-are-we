@@ -1,7 +1,45 @@
 body{
 	box-sizing: border-box;
-	background-image: url("../images/background.png");
+	/*background-image: url("../images/background.png");*/
+	background-image: url(../images/earth.jpg);
 }
+
+.clouds{
+	background: none;
+    background-image: url('../images/bckgnd.png');
+    height: 350%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index:-1;
+    -webkit-animation: clouds 400s linear infinite;
+    -moz-animation: clouds 400s linear infinite;
+    -ms-animation: clouds 400s linear infinite;
+    animation: clouds 400s linear infinite;
+}
+/* clouds change position over 400 seconds */
+@keyframes clouds {
+  0% {background-position: 0px 0px, 0px 0px;}
+  50% {background-position: -700px 0px, 0px 0px;}
+  100% {background-position: -1400px 0px, 0px 0px;}
+}
+@-moz-keyframes clouds {
+  0% {background-position: 0px 0px, 0px 0px;}
+  50% {background-position: -700px 0px, 0px 0px;}
+  100% {background-position: -1400px 0px 0px 0px;}
+}
+@-webkit-keyframes clouds {
+  0% {background-position: 0px 0px, 0px 0px;}
+  50% {background-position: -700px 0px, 0px 0px;}
+  100% {background-position: -1400px 0px, 0px 0px;}
+}
+@-ms-keyframes clouds {
+  0% {background-position: 0px 0px, 0px 0px;}
+  50% {background-position: -700px 0px, 0px 0px;}
+  100% {background-position: -1400px 0px, 0px 0px;}
+}
+
 input{
 	width:75%;
 	text-align: center;

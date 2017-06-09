@@ -70,11 +70,14 @@ $("body").on("click","#submitAnswer", function(){
     $("body").scrollTop(0);
     $("#submitAnswer").remove();
   }
+
   else
   {
+    
+}
     //still player1's turn but the value is submmitted from player2's window
    
-  }
+  $("#instructions").html("<h3>" + "It's Player 2 turn!" + "</h3>");
   
 
   if(turn ===2 && player2.name === thisPlayer)
@@ -164,7 +167,8 @@ function enterGame() {
         tie: 0,
         guessedLat: 0,
         guessedLng: 0,
-        diffDistance: 0
+        diffDistance: 0,
+        playerNum: 1
       };
       
       // chatkey=chatRef.push().key;
@@ -190,7 +194,8 @@ function enterGame() {
         tie: 0,
         guessedLat: 0,
         guessedLng: 0,
-        diffDistance: 0
+        diffDistance: 0,
+        playerNum: 2
       };
       $("#name-form").hide();
       thisPlayer = playerName;
