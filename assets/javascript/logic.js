@@ -683,8 +683,10 @@ function resultScreen() {
 $("#msgSend").click(function () {
   event.preventDefault();
 
+  var error_element=$("span", $("#chat-input").parent());
   if (thisPlayer !== "") {
     var msg = $("#chat-input").val().trim();
+    error_element.removeClass("error_show").addClass("error");
     chatkey = database.ref("/chats").push().key;
     //yoga speak api
     var queryURL = "https://yoda.p.mashape.com/yoda?sentence="
@@ -708,6 +710,11 @@ $("#msgSend").click(function () {
       }
     });
 
+    $("#chat-input").val("");
+  }
+  else
+  {
+    error_element.removeClass("error").addClass("error_show");
     $("#chat-input").val("");
   }
 });
