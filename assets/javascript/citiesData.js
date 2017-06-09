@@ -155,7 +155,7 @@ var cities = [
     {
         name: "Kyoto",
         lat: 35.0116,
-        lng: 1135.7680,
+        lng: 135.7680,
     },
     {
         name: "Beijing",

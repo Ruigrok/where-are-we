@@ -6,20 +6,23 @@ html {
 }
 body {
   /* Margin bottom by footer height */
-  margin-bottom: 150px;
+  margin-bottom: 50px;
   background-image: url(../images/earth.jpg);
   box-sizing: border-box;
 }
 .footer {
   position: absolute;
   bottom: 0;
-  width: 35%;
+  width: 30%;
   /* Set the fixed height of the footer here */
   /*height: 150px;*/
   text-align:center;
   background-color:rgba(241,241,241,0.8);
-  left:63%;
+  left:70%;
 
+}
+.footer .row{
+	margin:0;
 }
 
 .footer .btn-default{
@@ -27,7 +30,7 @@ body {
 }
 
 #chat-display{
-	height:90px;
+	height:150px;
 	width:auto;
 	border: 2px solid #eee;
 	text-align:left;
@@ -55,8 +58,8 @@ body {
 
 #resultMap
 {
-	position: relative;
-    left: 23%;
+	width:400px;
+	margin:0 auto;
 }
 /*
 .chatmsg:nth-child(-n+3){
@@ -99,6 +102,7 @@ body {
   50% {background-position: -700px 0px, 0px 0px;}
   100% {background-position: -1400px 0px, 0px 0px;}
 }
+
 @-ms-keyframes clouds {
   0% {background-position: 0px 0px, 0px 0px;}
   50% {background-position: -700px 0px, 0px 0px;}
@@ -142,7 +146,7 @@ li:before {
   margin: 0 auto; /* Gives that scrolling effect as the typing happens */
   letter-spacing: .15em; /* Adjust as needed */
   animation: 
-  typing 3.5s steps(30, end);
+  typing 3s steps(30, end);
   /*blink-caret .75s step-end infinite;*/
 }
 /* The typing effect */
