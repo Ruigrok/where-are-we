@@ -110,7 +110,7 @@ input{
 	margin-top: 90px;
 	font-family: 'Droid Sans', sans-serif;
 	background-color:rgba(128,137,172,0.7);
-	text-shadow: 0 0 5px white;
+	text-shadow: 0 0 2px white;
 }
 
 ol {
@@ -120,8 +120,8 @@ ol {
 li:before {
   content: '\2022';
   padding: 8px;
-  text-shadow: 0 0 3px white;
-  font-size: 18px;
+  text-shadow: 0 0 2px white;
+  font-size: 20px;
 }
 
 /*Typewritter effect code from https://css-tricks.com/snippets/css/typewriter-effect/*/
@@ -159,6 +159,7 @@ li{
 {
 	background-color: rgba(221,221,221,0.8) !important;;
 	border-color: transparent;
+	font-family: 'Bree Serif', serif;
 }
 
 .panel
