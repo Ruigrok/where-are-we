@@ -225,14 +225,6 @@ playersRef.on("child_removed", function (snapshot) {
   $("#gamePlay").empty();
   gameInitialized = true;
 
-  database.ref("/photoReference").remove();
-  referenceArray = [];
-  turn = 0;
-  database.ref().child("/turn").remove();
-  database.ref().child("targetCity").remove();
-  database.ref().child("result").remove();
-  database.ref().child("/nextRound").remove();
-
   //code from http://jsfiddle.net/dotnetCarpenter/KpM5j/
   //keep the chat always scrolled to the bottom
   var out = document.getElementById("chat-display");
@@ -243,12 +235,18 @@ playersRef.on("child_removed", function (snapshot) {
     out.scrollTop = out.scrollHeight - out.clientHeight;
   }
 
-  database.ref().child(chatkey).remove();
 
   if (snapshot.val().name !== thisPlayer && thisPlayer) {
     $("#instructions").html("<h2>" + snapshot.val().name + " has left the game. Waiting for another player to join! <i class=\"fa fa-spinner fa-pulse fa-2x fa-fw\"></i></h2>");
     getNewCity();
   }
+
+  database.ref("/photoReference").remove();
+  database.ref().child("/turn").remove();
+  database.ref().child("targetCity").remove();
+  database.ref().child("result").remove();
+  database.ref().child("/nextRound").remove();
+  database.ref().child(chatkey).remove();
 
 });
 

@@ -44,7 +44,7 @@ body {
 }
 
 .chatmsg{
-    border-bottom: 1px dotted #B3A9A9;
+    border-bottom: 2px dotted #B3A9A9;
 }
 
 .player1msg span{
@@ -125,6 +125,7 @@ input{
 	font-family: 'Droid Sans', sans-serif;
 	background-color:rgba(206,221,255,0.8);
 	/*text-shadow: 0 0 2px black;*/
+
 }
 
 ol {
@@ -144,7 +145,7 @@ li:before {
   /*border-right: .15em solid orange; /* The typwriter cursor */
   white-space: nowrap; /* Keeps the content on a single line */
   margin: 0 auto; /* Gives that scrolling effect as the typing happens */
-  letter-spacing: .15em; /* Adjust as needed */
+  letter-spacing: .10em; /* Adjust as needed */
   animation: 
   typing 3s steps(30, end);
   /*blink-caret .75s step-end infinite;*/
