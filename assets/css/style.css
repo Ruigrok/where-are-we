@@ -1,13 +1,51 @@
-body{
-	box-sizing: border-box;
-	/*background-image: url("../images/background.png");*/
-	background-image: url(../images/earth.jpg);
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
 }
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 150px;
+  background-image: url(../images/earth.jpg);
+  box-sizing: border-box;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 150px;
+  text-align:center;
+  background-color:rgba(241,241,241,0.8);
+  left:0;
+
+}
+
+#chat-display{
+	min-height:90px;
+	width:auto;
+	border: 2px solid #eee;
+	text-align:left;
+}
+
+.chatmsg{
+    display:none;
+}
+.chatmsg:nth-child(-n+3){
+    display:block;
+}
+
+/*body{
+	box-sizing: border-box;
+	background-image: url("../images/background.png");
+	background-image: url(../images/earth.jpg);
+}*/
 
 .clouds{
 	background: none;
     background-image: url('../images/bckgnd.png');
-    height: 350%;
+    height: 100%;
     left: 0;
     position: absolute;
     top: 0;

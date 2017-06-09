@@ -23,7 +23,7 @@ var player2 = null;
 var turn=0;
 var gameInitialized=true;
 var playerName = "";
-var thisPlayer;
+var thisPlayer="";
 var player1Ready,player2Ready;
 
 //Array of city objects. When we actually fill out all the city info we can move the array to another JS file to reduce clutter
@@ -37,6 +37,9 @@ var referenceArray = [];
 var time = 100;
 var guessedLat,guessedLng,cityLocation;
 var winner;
+
+//chat
+var chatkey;
 
 
 
@@ -246,20 +249,14 @@ playersRef.on("value", function (snapshot) {
   //when both players are present, set up the game play screen
   if(player1 && player2)
   {
-
-
-    // $("#timerHeader").show();
-    // setInterval(function(){
-    //   time--;
-    //   $("#timer").text(time);
-    //   if(time === 0){
-    //     //need function here to hide game screen and show results screen
-    //   }
-    // }, 1000);
-
     //create game play screen
     gamePlay();
 
+  }
+
+  if(!player1 && !player2)
+  {
+    database.ref("/chats").remove();
   }
 
 
@@ -278,6 +275,9 @@ playersRef.on("child_removed", function (snapshot) {
   database.ref().child("targetCity").remove();
   database.ref().child("result").remove();
   database.ref().child("/nextRound").remove();
+  $("#chat-display").prepend("<div><i>"+snapshot.val().name + " has left the game</i></div>");
+
+  database.ref().child(chatkey).remove();
 
   if (snapshot.val().name !==thisPlayer && thisPlayer)
   {
@@ -659,6 +659,77 @@ function resultScreen()
 
 
 };
+
+
+//Chat
+$("#msgSend").click(function(){
+  event.preventDefault();
+
+  if(thisPlayer !=="")
+  {
+    var msg=$("#chat-input").val().trim();
+    chatkey=database.ref("/chats").push().key;
+    //yoga speak api
+    var queryURL = "https://yoda.p.mashape.com/yoda?sentence="
+ // var apiKey = 
+
+    $.ajax({
+        url: queryURL,
+        type: 'GET', 
+        data: {sentence: msg}, 
+        datatype: 'json',
+        success: function (data) {
+        //This is where we save the input to firebase
+        database.ref("/chats").child(chatkey).set({name:thisPlayer,msg:data});
+
+        },
+        error: function (err) {
+        database.ref("/chats").child(chatkey).set({name:thisPlayer,msg:msg});
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("X-Mashape-Authorization", "ik02WzBl8TmshlqE6egi5CrJym5Fp1joXQBjsnK4spjr8w0aWW"); 
+        }
+    });
+
+    
+    $("#chat-input").val("");
+  }
+
+});
+
+database.ref("/chats").on("child_added", function(snapshot){
+  
+      var chatname=snapshot.child("name").val();
+      var chatmsg=snapshot.child("msg").val();
+      if(chatmsg)
+      {
+        var entry=$("<div>").html(chatname+": "+chatmsg);
+        if(chatname===player1.name)
+        {
+          entry.addClass("chatmsg player1msg");
+        }else if(chatname===player2.name)
+        {
+          entry.addClass("chatmsg player2msg");
+        }
+
+        $("#chat-display").prepend(entry);
+      }
+
+
+
+});
+
+playersRef.on("child_added", function(snapshot) {
+  //put in chat message that a player has enter the game
+    if(snapshot.val().name)
+    {
+      $("#chat-display").prepend("<div class=\"chatmsg\"><i>"+snapshot.val().name + " is in the game</i></div>");
+    }
+
+
+});
+
+
 
 
 
