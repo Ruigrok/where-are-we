@@ -52,6 +52,12 @@ body {
 	margin-left:5px;
 	margin-top:2px;
 }
+
+#resultMap
+{
+	position: relative;
+    left: 23%;
+}
 /*
 .chatmsg:nth-child(-n+3){
     display:block;

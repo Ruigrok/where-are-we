@@ -653,7 +653,8 @@ function resultScreen() {
   // this was added in order to remove the instructions at the result screen , it's only removing it for player2 , still need to add the instruction in the database so we can remove it at the result screen for both screens
   //$("#instructions").remove();
 
-  database.ref().child("/result").set("<div class='row'><div class='col-md-8 col-md-offset-2'><div class='panel panel-default'><div class='panel-heading'><h3 class='panel-title'>Results</h3></div><div class='panel-body' id='resultDisplay'><table class='table table-condensed'><caption><h2>The city in the photo is <strong><a href=\"https://en.wikipedia.org/wiki/"
+  database.ref().child("/result").set("<div class='row'><div class='col-md-8 col-md-offset-2'><div class='panel panel-default'><div class='panel-heading'><h3 class='panel-title'>Results</h3></div><div class='panel-body' id='resultDisplay'><table class='table table-condensed'><div id='resultMap'><img src=\"https://maps.googleapis.com/maps/api/staticmap?center="
+    + randomCity.lat+","+ randomCity.lng +"&zoom=14&size=400x400&key=AIzaSyB5-USGgBJR6SQE5bE-A8c58TcHkomHDck\"></div><caption><h2>The city in the photo is <strong><a href=\"https://en.wikipedia.org/wiki/"
     + randomCity.name + "\" target=\"_blank\">"
     + randomCity.name + "</a></strong></h2></caption><thead><tr><th><i class='fa fa-tachometer fa-2x' aria-hidden='true'></i></th><th>"
     + player1.name + "</th><th>"
