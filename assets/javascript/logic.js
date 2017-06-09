@@ -38,9 +38,13 @@ var time = 100;
 var guessedLat,guessedLng,cityLocation;
 var winner;
 
+
+
 //player enter event
 $("#addPlayer").click(function () {
   event.preventDefault();
+ 
+
   if ($("#name-input").val() !== ""){
     playerName = $("#name-input").val().trim();;
     enterGame();
