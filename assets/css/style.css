@@ -2,6 +2,10 @@ body{
 	box-sizing: border-box;
 	background-image: url("../images/background.png");
 }
+input{
+	width:75%;
+	text-align: center;
+}
 
 #timerHeader{
 	margin:15px 30px 5px 0px;
@@ -14,31 +18,61 @@ body{
 }
 
 #map, #map2 {
-    width: 50%;
+    width: 75%;
     height: 400px;
     background-color: grey;
 }
 
-#map
-{
-	border: solid black 4px;
+#photoCarousel{
+	margin-bottom: 3%;
+}
+caption, .panel-title{
+	text-align: center
 }
 
-#map2
+#resultId
 {
-	border: solid black 4px;
+	text-align: center;
+}
+#correctCity
+{
+	text-align:center;
+
+}
+#scores
+{
+	text-align: center;
 }
 
 #name1
 {
 	text-align: center;
+    margin-right: 372px;
 }
+#win1
+{
+	text-align: center;
+    margin-right: 372px;
+}
+#loss1
+{
+	text-align: center;
+    margin-right: 372px;
+}
+
 #name2
 {
 	text-align: center;
+    margin-left: 372px;
+    margin-top: -149px;
 }
-
-#nextRound
+#win2
 {
-	color: red;
+	text-align: center;
+    margin-left: 372px;
+}
+#loss2
+{
+	text-align: center;
+    margin-left: 372px;
 }
