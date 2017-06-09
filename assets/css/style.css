@@ -79,7 +79,7 @@ body {
     left: 0;
     position: absolute;
     top: 0;
-    width: auto;
+    width: 100%;
     z-index:-1;
     -webkit-animation: clouds 400s linear infinite;
     -moz-animation: clouds 400s linear infinite;
@@ -143,7 +143,7 @@ li:before {
 .jumbotron h1,.jumbotron h2,.jumbotron h3,.jumbotron li {
   overflow: hidden; /* Ensures the content is not revealed until the animation */
   /*border-right: .15em solid orange; /* The typwriter cursor */
-  white-space: nowrap; /* Keeps the content on a single line */
+  white-space: nowrap;  Keeps the content on a single line 
   margin: 0 auto; /* Gives that scrolling effect as the typing happens */
   letter-spacing: .10em; /* Adjust as needed */
   animation: 
