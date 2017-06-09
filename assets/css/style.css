@@ -6,20 +6,24 @@ html {
 }
 body {
   /* Margin bottom by footer height */
-  /*margin-bottom: 150px;*/
+  margin-bottom: 150px;
   background-image: url(../images/earth.jpg);
   box-sizing: border-box;
 }
 .footer {
   position: absolute;
   bottom: 0;
-  width: 100%;
+  width: 35%;
   /* Set the fixed height of the footer here */
   /*height: 150px;*/
   text-align:center;
   background-color:rgba(241,241,241,0.8);
-  left:0;
+  left:63%;
 
+}
+
+.footer .btn-default{
+	background-color:rgba(255,255,255,0.7);
 }
 
 #chat-display{
@@ -109,8 +113,8 @@ input{
 .jumbotron{
 	margin-top: 90px;
 	font-family: 'Droid Sans', sans-serif;
-	background-color:rgba(128,137,172,0.7);
-	text-shadow: 0 0 2px white;
+	background-color:rgba(206,221,255,0.8);
+	/*text-shadow: 0 0 2px black;*/
 }
 
 ol {
@@ -120,7 +124,7 @@ ol {
 li:before {
   content: '\2022';
   padding: 8px;
-  text-shadow: 0 0 2px white;
+  /*text-shadow: 0 0 2px black;*/
   font-size: 20px;
 }
 
