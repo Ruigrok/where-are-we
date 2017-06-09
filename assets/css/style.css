@@ -6,7 +6,7 @@ html {
 }
 body {
   /* Margin bottom by footer height */
-  margin-bottom: 150px;
+  /*margin-bottom: 150px;*/
   background-image: url(../images/earth.jpg);
   box-sizing: border-box;
 }
@@ -15,7 +15,7 @@ body {
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
-  height: 150px;
+  /*height: 150px;*/
   text-align:center;
   background-color:rgba(241,241,241,0.8);
   left:0;
@@ -23,18 +23,35 @@ body {
 }
 
 #chat-display{
-	min-height:90px;
+	height:90px;
 	width:auto;
 	border: 2px solid #eee;
 	text-align:left;
+	border-radius:10px;
+	overflow: auto;
+}
+
+.player2msg{
+	text-align:right;
+
 }
 
 .chatmsg{
-    display:none;
+    border-bottom: 1px dotted #B3A9A9;
 }
+
+.player1msg span{
+	margin-right:5px;
+	margin-top:2px;
+}
+.player2msg span{
+	margin-left:5px;
+	margin-top:2px;
+}
+/*
 .chatmsg:nth-child(-n+3){
     display:block;
-}
+}*/
 
 /*body{
 	box-sizing: border-box;

@@ -95,15 +95,22 @@
       <div class="footer">
         <div class="row">
           <div class="col-md-8 col-md-offset-2">
-            <span>Chat</span>
-            <div id="chat-display">
-                
+            <span><i class="fa fa-comments-o fa-lg" aria-hidden="true"></i>Chat</span>
+            <div class="btn-group pull-right">
+              <a type="button" class="btn btn-default btn-xs" data-toggle="collapse" aria-expanded="false" data-parent="#accordion" href="#collapseOne">
+              <span class="glyphicon glyphicon-chevron-down"></span>
+                        </a>
             </div>
+            <div class="collapse" id="collapseOne">
+              <div id="chat-display">
+                  
+              </div>
 
-            <form id="chat-form">
-              <input type="text" id="chat-input">
-              <button type="submit" class="btn btn-default" id="msgSend">Send</button>
-            </form>
+              <form id="chat-form">
+                <input type="text" id="chat-input" placeholder="Type your message here...">
+                <button type="submit" class="btn btn-default" id="msgSend">Send</button>
+              </form>
+            </div>
           </div>
         </div>
       </div>

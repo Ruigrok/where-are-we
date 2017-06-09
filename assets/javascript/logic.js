@@ -275,7 +275,17 @@ playersRef.on("child_removed", function (snapshot) {
   database.ref().child("targetCity").remove();
   database.ref().child("result").remove();
   database.ref().child("/nextRound").remove();
-  $("#chat-display").prepend("<div><i>"+snapshot.val().name + " has left the game</i></div>");
+
+    //code from http://jsfiddle.net/dotnetCarpenter/KpM5j/
+      //keep the chat always scrolled to the bottom
+  var out=document.getElementById("chat-display");
+  var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 1;
+  $("#chat-display").append("<div><i>"+snapshot.val().name + " has left the game</i></div>");
+   // scroll to bottom if isScrolledToBotto
+  if(isScrolledToBottom)
+  {
+    out.scrollTop = out.scrollHeight - out.clientHeight;
+  }
 
   database.ref().child(chatkey).remove();
 
@@ -816,18 +826,47 @@ database.ref("/chats").on("child_added", function(snapshot){
   
       var chatname=snapshot.child("name").val();
       var chatmsg=snapshot.child("msg").val();
+
+      var out=document.getElementById("chat-display");
       if(chatmsg)
       {
-        var entry=$("<div>").html(chatname+": "+chatmsg);
+          // allow 1px inaccuracy by adding 1
+          //code from http://jsfiddle.net/dotnetCarpenter/KpM5j/
+          //keep the chat always scrolled to the bottom
+          var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 1;
+
+        // var entry=$("<div>").html(chatname+": "+chatmsg);
+        var entry =$("<div>");
+        var chatHeader=$("<div>").html("<strong>"+chatname+"</strong>");
+        var chatbody=$("<div>").html("<p>"+chatmsg+"</p>");
+        var chatImg=$("<img>");
+        var imgspan=$("<span>");
+        chatImg.addClass("img-circle");
+        chatImg.attr("src","https://via.placeholder.com/50//55C1E7/fff&text="+chatname);
         if(chatname===player1.name)
         {
           entry.addClass("chatmsg player1msg");
+          imgspan.addClass("pull-left");
+          chatImg.attr("src","https://via.placeholder.com/45/55C1E7/fff&text="+chatname);
+
         }else if(chatname===player2.name)
         {
           entry.addClass("chatmsg player2msg");
+          imgspan.addClass("pull-right");
+          chatImg.attr("src","https://via.placeholder.com/45/FA6F57/fff&text="+chatname);
         }
 
-        $("#chat-display").prepend(entry);
+        imgspan.append(chatImg);
+        entry.append(imgspan);
+        entry.append(chatHeader);
+        entry.append(chatbody);
+
+        $("#chat-display").append(entry);
+    // scroll to bottom if isScrolledToBotto
+        if(isScrolledToBottom)
+        {
+          out.scrollTop = out.scrollHeight - out.clientHeight;
+        }
       }
 
 
@@ -838,7 +877,18 @@ playersRef.on("child_added", function(snapshot) {
   //put in chat message that a player has enter the game
     if(snapshot.val().name)
     {
-      $("#chat-display").prepend("<div class=\"chatmsg\"><i>"+snapshot.val().name + " is in the game</i></div>");
+      //code from http://jsfiddle.net/dotnetCarpenter/KpM5j/
+          //keep the chat always scrolled to the bottom
+      var out=document.getElementById("chat-display");
+      var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 1;
+      $("#chat-display").append("<div class=\"chatmsg\"><i>"+snapshot.val().name + " is in the game</i></div>");
+
+       // scroll to bottom if isScrolledToBotto
+        if(isScrolledToBottom)
+        {
+          out.scrollTop = out.scrollHeight - out.clientHeight;
+        }
+      
     }
 
 
