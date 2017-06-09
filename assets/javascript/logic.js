@@ -77,7 +77,7 @@ $("body").on("click","#submitAnswer", function(){
 }
     //still player1's turn but the value is submmitted from player2's window
    
-  $("#instructions").html("<h3>" + "It's Player 2 turn!" + "</h3>");
+  //$("#instructions").html("<h3>" + "It's Player 2 turn!" + "</h3>");
   
 
   if(turn ===2 && player2.name === thisPlayer)
