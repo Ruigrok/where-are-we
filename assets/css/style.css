@@ -66,7 +66,7 @@ body {
     left: 0;
     position: absolute;
     top: 0;
-    width: 100%;
+    width: auto;
     z-index:-1;
     -webkit-animation: clouds 400s linear infinite;
     -moz-animation: clouds 400s linear infinite;
@@ -108,6 +108,67 @@ input{
 
 .jumbotron{
 	margin-top: 90px;
+	font-family: 'Droid Sans', sans-serif;
+	background-color:rgba(128,137,172,0.7);
+	text-shadow: 0 0 5px white;
+}
+
+ol {
+  list-style: none;
+}
+
+li:before {
+  content: '\2022';
+  padding: 8px;
+  text-shadow: 0 0 3px white;
+  font-size: 18px;
+}
+
+/*Typewritter effect code from https://css-tricks.com/snippets/css/typewriter-effect/*/
+.jumbotron h1,.jumbotron h2,.jumbotron h3,.jumbotron li {
+  overflow: hidden; /* Ensures the content is not revealed until the animation */
+  /*border-right: .15em solid orange; /* The typwriter cursor */
+  white-space: nowrap; /* Keeps the content on a single line */
+  margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+  letter-spacing: .15em; /* Adjust as needed */
+  animation: 
+  typing 3.5s steps(30, end);
+  /*blink-caret .75s step-end infinite;*/
+}
+/* The typing effect */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* The typewriter cursor effect */
+/*@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: orange; }
+}*/
+
+li{
+	font-size:18px;
+}
+
+#title{
+	color:black;
+}
+
+.navbar
+{
+	background-color: rgba(221,221,221,0.8) !important;;
+	border-color: transparent;
+}
+
+.panel
+{
+	background-color:rgba(255,255,255,0.8);
+}
+
+.panel-heading
+{
+	background-color: rgba(221,221,221,0.8) !important;
 }
 
 #map, #map2 {
