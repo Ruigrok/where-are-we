@@ -88,12 +88,14 @@ $("body").on("click", "#nextRound", function () {
 
   if (player1.name === thisPlayer && !player2Ready) {
     $("#instructions").html("<h2>Waiting for " + player2.name + " to be ready for the next round.<i class=\"fa fa-spinner fa-pulse fa-2x fa-fw\"></i></h2>");
+    $("body").scrollTop(0);
     database.ref().child("/nextRound/player1").set(true);
   } else if (player1.name === thisPlayer && player2Ready) {
     setupForNextRound();
     database.ref().child("/nextRound/player1").set(true);
   } else if (player2.name === thisPlayer && !player1Ready) {
     $("#instructions").html("<h2>Waiting for " + player1.name + " to be ready for the next round.<i class=\"fa fa-spinner fa-pulse fa-2x fa-fw\"></i></h2>");
+    $("body").scrollTop(0);
     database.ref().child("/nextRound/player2").set(true);
   } else if (player2.name === thisPlayer && player1Ready) {
     setupForNextRound();
