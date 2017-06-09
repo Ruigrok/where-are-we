@@ -431,6 +431,128 @@ function gamePlay()
   var myLatLng = { lat: 0, lng: 0 };
 //This is the function for adding the pin-drop map
 function initMap() {
+
+     var styledMapType = new google.maps.StyledMapType(
+            [
+    {
+        "featureType": "administrative",
+        "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "landscape",
+        "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "simplified"
+            },
+            {
+                "hue": "#0066ff"
+            },
+            {
+                "saturation": 74
+            },
+            {
+                "lightness": 100
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "simplified"
+            }
+        ]
+    },
+    {
+        "featureType": "road",
+        "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "simplified"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "off"
+            },
+            {
+                "weight": 0.6
+            },
+            {
+                "saturation": -85
+            },
+            {
+                "lightness": 61
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "transit",
+        "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "simplified"
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "simplified"
+            },
+            {
+                "color": "#5f94ff"
+            },
+            {
+                "lightness": 26
+            },
+            {
+                "gamma": 5.86
+            }
+            ]
+         }
+        ],
+      {name: 'Styled Map'});
   
   //Create new LatLng object for the location of "randomCity"
  cityLocation = new google.maps.LatLng(randomCity.lat, randomCity.lng);
@@ -440,35 +562,28 @@ function initMap() {
   var map = new google.maps.Map(document.getElementById('map'), {
     zoom: 1,
     center: myLatLng,
-    streetViewControl: false
+    streetViewControl: false,
+    mapTypeControl: false,
+    mapTypeControlOptions: {
+      mapTypeIds: ['styled_map']
+    }
   });
+
+    //Associate the styled map with the MapTypeId and set it to display.
+        map.mapTypes.set('styled_map', styledMapType);
+        map.setMapTypeId('styled_map');
 
   //Creating the marker and making it draggable for player to drag
   //player1's draggable marker 
   var marker = new google.maps.Marker({
     position: myLatLng,
     map: map,
+    animation: google.maps.Animation.DROP,
     draggable: true,
     title: "Drag me!"
   });
 
-  // //create player2's guess map
-  // var map2 = new google.maps.Map(document.getElementById('map2'), {
-  //   zoom: 1,
-  //   center: myLatLng,
-  //   streetViewControl: false
-  // });
 
-  // //Creating the marker and making it draggable for player to drag
-  // //player2's draggable marker 
-  // var marker2 = new google.maps.Marker({
-  //   position: myLatLng,
-  //   map: map2,
-  //   draggable: true,
-  //   title: "Drag me!"
-  // });
-
-  //Use a listening event to retrieve the end value of where the marker is dragged to
   //player1's marker listener for user's drag event
   google.maps.event.addListener(marker, 'dragend', function () {
     guessedLat = marker.getPosition().lat();
