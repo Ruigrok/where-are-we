@@ -200,6 +200,20 @@ caption, .panel-title{
 	text-align: center
 }
 
+.error{
+	display: none;
+	margin-left: 10px;
+}		
+
+.error_show{
+	color: red;
+	margin-left: 10px;
+	display:block;
+}
+
+
+
+/*
 #resultId
 {
 	text-align: center;
@@ -245,4 +259,4 @@ caption, .panel-title{
 {
 	text-align: center;
     margin-left: 372px;
-}
+}*/

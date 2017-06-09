@@ -37,14 +37,23 @@ var winner;
 //chat
 var chatkey;
 
+
 //player enter event
 $("#addPlayer").click(function () {
   event.preventDefault();
 
+  var error_element=$("span", $("#name-input").parent());
   if ($("#name-input").val() !== "") {
+    error_element.removeClass("error_show").addClass("error");
     playerName = $("#name-input").val().trim();;
     enterGame();
+  }else
+  {
+    
+    error_element.removeClass("error").addClass("error_show");
   }
+
+
 });
 
 $("#name-input").keypress(function (e) {
