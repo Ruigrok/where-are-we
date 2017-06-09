@@ -55,7 +55,7 @@ $("#name-input").keypress(function(e) {
 });
 
 $("body").on("click","#submitAnswer", function(){
-
+console.log("I like turtles");
 
   if(turn ===1 && player1.name === thisPlayer)
   {
