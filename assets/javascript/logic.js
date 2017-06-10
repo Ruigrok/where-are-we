@@ -184,6 +184,11 @@ function enterGame() {
     };
     $("#name-form").hide();
     thisPlayer = playerName;
+
+    if(player1)
+    {
+      getNewCity();
+    }
     database.ref().child("/turn").set(1);
     playersRef.child(2).set(player2);
 
