@@ -251,7 +251,7 @@ playersRef.on("child_removed", function (snapshot) {
 
 
   if (snapshot.val().name !== thisPlayer && thisPlayer) {
-    $("#instructions").html("<h2>" + snapshot.val().name + " has left the game. Waiting for another player to join! <i class=\"fa fa-spinner fa-pulse fa-2x fa-fw\"></i></h2>");
+    $("#instructions").html("<h2>" + snapshot.val().name + " has left the game. <br> Waiting for another player to join! <i class=\"fa fa-spinner fa-pulse fa-2x fa-fw\"></i></h2>");
     getNewCity();
   }
 
@@ -668,18 +668,18 @@ function resultScreen() {
   //$("#instructions").remove();
 
   database.ref().child("/result").set("<div class='row'><div class='col-md-8 col-md-offset-2'><div class='panel panel-default'><div class='panel-heading'><h3 class='panel-title'>Results</h3></div><div class='panel-body' id='resultDisplay'><table class='table table-condensed'><div id='resultMap'><img src=\"https://maps.googleapis.com/maps/api/staticmap?center="
-    + randomCity.lat+","+ randomCity.lng +"&zoom=12&size=400x400&key=AIzaSyB5-USGgBJR6SQE5bE-A8c58TcHkomHDck&style=feature:administrative|element:all|visibility:off&style=feature:administrative.locality|element:all|visibility:simplified&style=feature:landscape|element:all|visibility:simplified|hue:0x0066ff|saturation:74|lightness:100&style=feature:poi|element:all|visibility:simplified&style=feature:road|element:all|visibility:simplified&style=feature:road.highway|element:all|visibility:off|weight:0.6|saturation:-85|lightness:61&style=feature:road.highway|element:geometry|visibility:on&style=feature:road.arterial|element:all|visibility:off&style=feature:road.local|element:all|visibility:on&style=feature:transit|element:all|visibility:simplified&style=feature:water|element:all|visibility:simplified|color:0x5f94ff|lightness:26|gamma:5.86\"></div><caption><h2>The city in the photo is <strong><a href=\"https://en.wikipedia.org/wiki/"
+    + randomCity.lat+","+ randomCity.lng +"&zoom=12&size=400x400&key=AIzaSyB5-USGgBJR6SQE5bE-A8c58TcHkomHDck&style=feature:administrative|element:all|visibility:off&style=feature:administrative.locality|element:all|visibility:simplified&style=feature:landscape|element:all|visibility:simplified|hue:0x0066ff|saturation:74|lightness:100&style=feature:poi|element:all|visibility:simplified&style=feature:road|element:all|visibility:simplified&style=feature:road.highway|element:all|visibility:off|weight:0.6|saturation:-85|lightness:61&style=feature:road.highway|element:geometry|visibility:on&style=feature:road.arterial|element:all|visibility:off&style=feature:road.local|element:all|visibility:on&style=feature:transit|element:all|visibility:simplified&style=feature:water|element:all|visibility:simplified|color:0x5f94ff|lightness:26|gamma:5.86\"></div><caption><h2>The city in the photos was <strong><a href=\"https://en.wikipedia.org/wiki/"
     + randomCity.name + "\" target=\"_blank\">"
     + randomCity.name + "</a></strong></h2></caption><thead><tr><th><i class='fa fa-tachometer fa-2x' aria-hidden='true'></i></th><th>"
     + player1.name + "</th><th>"
-    + player2.name + "</th></tr></thead><tbody><tr><td>Win</td><td>"
+    + player2.name + "</th></tr></thead><tbody><tr><td>Wins</td><td>"
     + player1.win + "</td><td>"
-    + player2.win + "</td></tr><tr><td>Loss</td><td>"
+    + player2.win + "</td></tr><tr><td>Losses</td><td>"
     + player1.loss + "</td><td>"
-    + player2.loss + "</td></tr><tr><td>Off by Distance</td><td>"
+    + player2.loss + "</td></tr><tr><td>Off by</td><td>"
     + Math.round(player1.diffDistance / 1000) + "km </td><td>"
     + Math.round(player2.diffDistance / 1000) + "km </td></tr></tbody></table></div></div></div></div>"
-    + "<div class='row'><div class='col-md-6 col-md-offset-3'><button id='nextRound' class='btn btn-default btn-lg btn-block'><i class='fa fa-globe fa-lg' aria-hidden='true'></i>Next Round</button></div></div>");
+    + "<div class='row'><div class='col-md-6 col-md-offset-3'><button id='nextRound' class='btn btn-default btn-lg btn-block'><i class='fa fa-globe fa-lg' aria-hidden='true'></i> Next Round</button></div></div>");
 
 };
 
