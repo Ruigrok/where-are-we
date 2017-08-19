@@ -25,6 +25,41 @@ Firebase is also used for the real-time chat feature. For added fun, we pass all
 
 4. On the results screen, a static map is generated to show users a view of the correct city answer.
 
+### Landing Page
+
+![home-page](assets/images/screenshots/home-page.png)
+
+---
+
+### Waiting for Player 2
+
+![waiting for player 2](assets/images/screenshots/waiting.png)
+
+---
+
+### Google Places Photo Carousel
+
+![Google Places Photo Carousel](assets/images/screenshots/image-view.png)
+
+---
+### Pin-Drop Map & Player Chat
+
+![Pin-Drop Map & Player Chat](assets/images/screenshots/map-view.png)
+
+---
+
+### Correct City Display
+
+![Results Display 1](assets/images/screenshots/results-screen.png)
+
+---
+### Results Display
+
+![Results Display ](assets/images/screenshots/play-again.png)
+
+---
+
+
 
 
 
